@@ -75,7 +75,7 @@ void cast_ray(Scene scene)
                 Vector3f background(0.1, 0.1, 0.1);
                 gamma_correct(background);
 
-                Intersection intersection(Vector3f(0, 0, 0), Vector3f(0, 0, 0),NULL);
+                Intersection intersection(Vector3f(0, 0, 0), Vector3f(0, 0, 0), NULL);
 
                 if (scene.scene_intersection(ray, intersection))
                 {
@@ -95,9 +95,9 @@ void cast_ray(Scene scene)
 int main()
 {
     // Image
-    Material white_diffuse(Vector3f(0,0,0));
+    Material *white_diffuse = new Material(Vector3f(1, 1, 1));
 
-    Sphere sphere1(Vector3f(0, 0, -5), 0.7,&white_diffuse);
+    Sphere sphere1(Vector3f(0.0, 0.0, -5.0), 0.7, white_diffuse,sphere);
     std::vector<Sphere> spheres;
     spheres.push_back(sphere1);
 
