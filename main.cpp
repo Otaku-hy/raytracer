@@ -72,7 +72,7 @@ void cast_ray(Scene scene)
                 Vector3f rayDir = Vector3f(coord_x, coord_y, -1.0).normalized();
                 Ray ray(Vector3f(0, 0, 0), rayDir);
 
-                Vector3f background(0.1, 0.1, 0.1);
+                Vector3f background(0.0, 0.7, 1.0);
                 gamma_correct(background);
 
                 Intersection intersection(Vector3f(0, 0, 0), Vector3f(0, 0, 0), NULL);
@@ -98,12 +98,15 @@ int main()
     Material *white_diffuse = new Material(Vector3f(1, 1, 1));
 
     Sphere sphere1(Vector3f(0.0, 0.0, -5.0), 0.7, white_diffuse,sphere);
-    std::vector<Sphere> spheres;
-    spheres.push_back(sphere1);
+    Plane plane1(Vector3f(0,-1.5,0),Vector3f(0,1,0),white_diffuse,plane);
+    std::vector<Object> objects;
+ 
+    objects.push_back(sphere1);
+    objects.push_back(plane1);
 
     PointLight light(Vector3f(0, 5, -2), Vector3f(1, 1, 1));
 
-    Scene scene(light, spheres);
+    Scene scene(light, objects);
 
     cast_ray(scene);
 

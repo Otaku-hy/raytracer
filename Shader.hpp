@@ -31,7 +31,7 @@ Vector3f phong(Scene scene, Intersection intersection)
 
         Vector3f _ambient = scene.lights[i].color * 0.08;
 
-        Vector3f BRDF(0.7, 0.5, 0.6);
+        Vector3f BRDF = intersection.material->albedo;
 
         Vector3f light = _ambient + _diffuse + _specular;
 

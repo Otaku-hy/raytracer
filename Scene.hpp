@@ -11,18 +11,18 @@ class Scene
 private:
     /* data */
 public:
-    Scene(PointLight _lights, std::vector<Sphere> &_spheres);
+    Scene(PointLight _lights, std::vector<Object> &_objects);
     ~Scene();
     bool scene_intersection(Ray ray, Intersection &intersection);
 
     std::vector<PointLight> lights;
-    std::vector<Sphere> spheres;
+    std::vector<Object> objects;
 };
 
-Scene::Scene(PointLight _lights, std::vector<Sphere> &_spheres)
+Scene::Scene(PointLight _lights, std::vector<Object> &_objects)
 {
     lights.push_back(_lights);
-    spheres = _spheres;
+    objects = _objects;
 }
 
 Scene::~Scene()
@@ -33,18 +33,26 @@ bool Scene::scene_intersection(Ray ray, Intersection &intersection)
 {
     float intersection_t = 500.0;
 
-    for (int i = 0; i < spheres.size(); i++)
+    for (int i = 0; i < objects.size(); i++)
     {
         float tmp_t = 550;
-        if (spheres[i].ray_intersection(ray, tmp_t) && tmp_t < intersection_t)
+        if (objects[i].ray_intersection(ray, tmp_t) && tmp_t < intersection_t)
         {
             intersection_t = tmp_t;
             Vector3f intersectPos = ray.origin + intersection_t * ray.dir;
-            Vector3f normal = (intersectPos - spheres[i].center).normalized();
+            Vector3f normal;
+            if (objects[i].type == sphere)
+            {
+                normal = (intersectPos - objects[i].center).normalized();
+            }
+            if (objects[i].type == plane)
+            {
+                normal = objects[i].norm;
+            }
 
             intersection.pos = intersectPos;
             intersection.norm = normal;
-            intersection.material = spheres[i].material;
+            intersection.material = objects[i].material;
         }
     }
 
