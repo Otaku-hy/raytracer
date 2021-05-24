@@ -2,16 +2,10 @@
 #define Shader_H
 
 #include "Scene.hpp"
+#include "Utils.hpp"
 #include <cmath>
 
 using namespace Eigen;
-
-void gamma_correct(Vector3f &color)
-{
-    color.x() = std::pow(color.x(), 1 / 2.2f);
-    color.y() = std::pow(color.y(), 1 / 2.2f);
-    color.z() = std::pow(color.z(), 1 / 2.2f);
-}
 
 Vector3f phong(Scene scene, Intersection intersection)
 {
@@ -38,9 +32,29 @@ Vector3f phong(Scene scene, Intersection intersection)
         color += Vector3f(light.x() * BRDF.x(), light.y() * BRDF.y(), light.z() * BRDF.z());
     }
 
-    gamma_correct(color);
-
     return color;
+}
+
+Vector3f rendering(Scene scene, Intersection intersection, int depth)
+{
+    Vector3f ldir(0, 0, 0);
+    Vector3f lindir(0, 0, 0);
+
+    Vector3f randomDir = intersection.material->sample(intersection.norm);
+    Ray objRay(intersection.pos, randomDir);
+
+    Intersection objIntersection(Vector3f(0, 0, 0), Vector3f(0, 0, 0), NULL);
+
+    Vector3f lightDir = (scene.lights[0].pos - intersection.pos).normalized();
+
+    ldir = product(scene.lights[0].color, intersection.material->eval(lightDir, intersection.norm)) * lightDir.dot(intersection.norm);
+
+    if (depth < 4 && scene.scene_intersection(objRay, objIntersection))
+    {
+        lindir = product(rendering(scene, objIntersection, depth + 1), intersection.material->eval(objRay.dir, intersection.norm)) * std::max(0.0f,objRay.dir.dot(objIntersection.norm)) / intersection.material->pdf();
+    }
+
+    return ldir + lindir;
 }
 
 #endif

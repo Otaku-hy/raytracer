@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include "lib/Eigen/Core"
 #include "Ray.hpp"
+#include "Utils.hpp"
 #include "Object.hpp"
 #include "Scene.hpp"
 #include "Shader.hpp"
@@ -14,24 +15,6 @@ const int SPP = 16;
 
 Vector3f screen[image_width][image_height];
 
-float randomFloat()
-{
-    int n = rand() % SPP;
-
-    return n / float(SPP);
-}
-
-void test()
-{
-    for (int i = 0; i < image_width; i++)
-    {
-        for (int j = 0; j < image_height; j++)
-        {
-            std::cout << screen[i][j].x() << screen[i][j].y() << screen[i][j].z() << std::endl;
-        }
-    }
-}
-
 void image_color()
 {
     std::cout << "P3\n"
@@ -41,6 +24,7 @@ void image_color()
     {
         for (int i = 0; i < image_width; ++i)
         {
+            gamma_correct(screen[i][image_height - 1 - j]);
             int ir = static_cast<int>(255.999 * screen[i][image_height - 1 - j].x());
             int ig = static_cast<int>(255.999 * screen[i][image_height - 1 - j].y());
             int ib = static_cast<int>(255.999 * screen[i][image_height - 1 - j].z());
@@ -64,8 +48,8 @@ void cast_ray(Scene scene)
         {
             for (int k = 0; k < SPP; k++)
             {
-                float coord_x = i + randomFloat();
-                float coord_y = j + randomFloat();
+                float coord_x = i + randomFloat(SPP);
+                float coord_y = j + randomFloat(SPP);
                 coord_x = (coord_x - image_width / 2.0) * width / float(image_width);
                 coord_y = (coord_y - image_height / 2.0) * height / float(image_height);
 
@@ -79,7 +63,7 @@ void cast_ray(Scene scene)
 
                 if (scene.scene_intersection(ray, intersection))
                 {
-                    screen[i][j] += phong(scene, intersection);
+                    screen[i][j] += rendering(scene,intersection,0);
                 }
                 else
                 {
@@ -97,10 +81,10 @@ int main()
     // Image
     Material *white_diffuse = new Material(Vector3f(1, 1, 1));
 
-    Sphere sphere1(Vector3f(0.0, 0.0, -5.0), 0.7, white_diffuse,sphere);
-    Plane plane1(Vector3f(0,-1.5,0),Vector3f(0,1,0),white_diffuse,plane);
+    Sphere sphere1(Vector3f(0.0, 0.0, -5.0), 0.7, white_diffuse, sphere);
+    Plane plane1(Vector3f(0, -1.5, 0), Vector3f(0, 1, 0), white_diffuse, plane);
     std::vector<Object> objects;
- 
+
     objects.push_back(sphere1);
     objects.push_back(plane1);
 
@@ -112,7 +96,7 @@ int main()
 
     image_color();
 
-    // test();
+    // test(image_width,image_height,screen);
 
     return 0;
 }
