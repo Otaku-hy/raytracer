@@ -9,61 +9,40 @@
 
 using namespace Eigen;
 
-const int image_width = 460;
-const int image_height = 240;
-const int SPP = 16;
-
-Vector3f screen[image_width][image_height];
-
-void image_color()
-{
-    std::cout << "P3\n"
-              << image_width << ' ' << image_height << "\n255\n";
-
-    for (int j = 0; j < image_height; ++j)
-    {
-        for (int i = 0; i < image_width; ++i)
-        {
-            gamma_correct(screen[i][image_height - 1 - j]);
-            int ir = static_cast<int>(255.999 * screen[i][image_height - 1 - j].x());
-            int ig = static_cast<int>(255.999 * screen[i][image_height - 1 - j].y());
-            int ib = static_cast<int>(255.999 * screen[i][image_height - 1 - j].z());
-
-            std::cout << ir << ' ' << ig << ' ' << ib << '\n';
-        }
-    }
-}
-
 void cast_ray(Scene scene)
 {
-    float aspect_ratio = image_width / float(image_height);
+    float aspect_ratio = scene.camera->width / float(scene.camera->height);
     float fov = 45.0 / 360.0 * PI * 2;
 
     float height = 2 * tan(fov / 2.0);
     float width = height * aspect_ratio;
 
-    for (int i = 0; i < image_width; i++)
+    for (int i = 0; i < scene.camera->width; i++)
     {
-        for (int j = 0; j < image_height; j++)
+        for (int j = 0; j < scene.camera->height; j++)
         {
-            for (int k = 0; k < SPP; k++)
+            for (int k = 0; k < scene.camera->SPP; k++)
             {
-                float coord_x = i + randomFloat(SPP);
-                float coord_y = j + randomFloat(SPP);
-                coord_x = (coord_x - image_width / 2.0) * width / float(image_width);
-                coord_y = (coord_y - image_height / 2.0) * height / float(image_height);
+                float coord_x = i + 0.5;
+                float coord_y = j + 0.5;
+                coord_x = (coord_x - scene.camera->width / 2.0) * width / float(scene.camera->width);
+                coord_y = (coord_y - scene.camera->height / 2.0) * height / float(scene.camera->height);
 
                 Vector3f rayDir = Vector3f(coord_x, coord_y, -1.0).normalized();
+                rayDir = scene.camera->translate * rayDir;
                 Ray ray(Vector3f(0, 0, 0), rayDir);
 
-                Vector3f background(0.0, 0.7, 1.0);
-                gamma_correct(background);
+                float interpolar = j / float(scene.camera->height);
+                Vector3f start(1.0, 1.0, 1.0);
+                Vector3f end(0.5, 0.7, 1.0);
+
+                Vector3f background = start + interpolar * (end - start);
 
                 Intersection intersection(Vector3f(0, 0, 0), Vector3f(0, 0, 0), NULL);
 
                 if (scene.scene_intersection(ray, intersection))
                 {
-                    screen[i][j] += rendering(scene,intersection,0);
+                    screen[i][j] += rendering(scene, intersection, 0);
                 }
                 else
                 {
@@ -71,7 +50,7 @@ void cast_ray(Scene scene)
                 }
             }
 
-            screen[i][j] /= SPP;
+            screen[i][j] /= float(scene.camera->SPP);
         }
     }
 }
@@ -80,23 +59,30 @@ int main()
 {
     // Image
     Material *white_diffuse = new Material(Vector3f(1, 1, 1));
+    Material *red_diffuse = new Material(Vector3f(1, 0, 0));
+    Material *skyblue_diffuse = new Material(Vector3f(0.5, 0.7, 1));
 
-    Sphere sphere1(Vector3f(0.0, 0.0, -5.0), 0.7, white_diffuse, sphere);
-    Plane plane1(Vector3f(0, -1.5, 0), Vector3f(0, 1, 0), white_diffuse, plane);
+    Sphere sphere1(Vector3f(0.0, -0.07, -5.0), 0.7, white_diffuse, sphere);
+    Sphere shpere3(Vector3f(0.0, -100.0, -5), 99.2, white_diffuse, sphere);
+    Sphere sphere2(Vector3f(2.5, 0.0, -5.0), 0.8, red_diffuse, sphere);
+    Sphere sphere4(Vector3f(-2.0, 0.1, -3.0), 0.9, skyblue_diffuse, sphere);
+
     std::vector<Object> objects;
 
     objects.push_back(sphere1);
-    objects.push_back(plane1);
+    objects.push_back(sphere2);
+    objects.push_back(shpere3);
+    objects.push_back(sphere4);
 
-    PointLight light(Vector3f(0, 5, -2), Vector3f(1, 1, 1));
+    AreaLight light(Vector3f(2, 4, -3), Vector3f(1, 1, 1), 10.0);
 
-    Scene scene(light, objects);
+    Camera camera(Vector3f(0, 0, 0), Vector3f(-0.35, 0, -1), Vector3f(0, 1.0, 0), 480, 260, 64);
+
+    Scene scene(camera, light, objects);
 
     cast_ray(scene);
 
-    image_color();
-
-    // test(image_width,image_height,screen);
+    camera.image_color();
 
     return 0;
 }

@@ -7,51 +7,30 @@
 
 using namespace Eigen;
 
-Vector3f phong(Scene scene, Intersection intersection)
-{
-    Vector3f color(0, 0, 0);
-
-    for (int i = 0; i < scene.lights.size(); i++)
-    {
-        Vector3f lightDir = (scene.lights[i].pos - intersection.pos).normalized();
-        Vector3f cameraDir = (Vector3f(0, 0, 0) - intersection.pos).normalized();
-        Vector3f half = (lightDir + cameraDir).normalized();
-
-        float diffuse = std::max(0.0f, lightDir.dot(intersection.norm)) * 0.7;
-        Vector3f _diffuse = scene.lights[i].color * diffuse;
-
-        float specular = std::pow(float(std::max(0.0f, half.dot(intersection.norm))), 32) * 0.3;
-        Vector3f _specular = scene.lights[i].color * specular;
-
-        Vector3f _ambient = scene.lights[i].color * 0.08;
-
-        Vector3f BRDF = intersection.material->albedo;
-
-        Vector3f light = _ambient + _diffuse + _specular;
-
-        color += Vector3f(light.x() * BRDF.x(), light.y() * BRDF.y(), light.z() * BRDF.z());
-    }
-
-    return color;
-}
-
 Vector3f rendering(Scene scene, Intersection intersection, int depth)
 {
     Vector3f ldir(0, 0, 0);
     Vector3f lindir(0, 0, 0);
 
+    Vector3f lightPos = scene.lights[0].SampleLight();
+    Vector3f lightDir = (lightPos - intersection.pos).normalized();
     Vector3f randomDir = intersection.material->sample(intersection.norm);
-    Ray objRay(intersection.pos, randomDir);
+    Vector3f offsetPos = offset(intersection.pos, intersection.norm, randomDir);
+    Vector3f lightOffset = offset(intersection.pos, intersection.norm, lightDir);
 
+    Ray objRay(offsetPos, randomDir);
     Intersection objIntersection(Vector3f(0, 0, 0), Vector3f(0, 0, 0), NULL);
+    Intersection lightIntersectiom(Vector3f(0, 0, 0), Vector3f(0, 0, 0), NULL);
+    Ray lightRay(lightOffset, lightDir);
 
-    Vector3f lightDir = (scene.lights[0].pos - intersection.pos).normalized();
-
-    ldir = product(scene.lights[0].color, intersection.material->eval(lightDir, intersection.norm)) * lightDir.dot(intersection.norm);
-
-    if (depth < 4 && scene.scene_intersection(objRay, objIntersection))
+    if (!scene.scene_intersection(lightRay, lightIntersectiom))
     {
-        lindir = product(rendering(scene, objIntersection, depth + 1), intersection.material->eval(objRay.dir, intersection.norm)) * std::max(0.0f,objRay.dir.dot(objIntersection.norm)) / intersection.material->pdf();
+        ldir = product(scene.lights[0].color, intersection.material->eval(lightDir, intersection.norm)) * lightDir.dot(intersection.norm) * -lightDir.dot(scene.lights[0].norm) / distance(lightPos, offsetPos) / scene.lights[0].lightPdf();
+    }
+
+    if (depth < 16 && scene.scene_intersection(objRay, objIntersection))
+    {
+        lindir = 0.75 * product(rendering(scene, objIntersection, depth + 1), intersection.material->eval(objRay.dir, intersection.norm)) * objRay.dir.dot(intersection.norm) / intersection.material->pdf();
     }
 
     return ldir + lindir;

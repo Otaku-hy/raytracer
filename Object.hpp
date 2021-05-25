@@ -69,10 +69,10 @@ bool Object::ray_intersection(Ray ray, float &t1)
     {
     case plane:
         t1 = (pos.y() - ray.origin.y()) / ray.dir.y();
-        if (t1 > 0)
-            return true;
+        if (t1 < 0)
+            return false;
 
-        return false;
+        return true;
 
         break;
 

@@ -4,6 +4,7 @@
 #include <vector>
 #include "Object.hpp"
 #include "Light.hpp"
+#include "Camera.hpp"
 using namespace Eigen;
 
 class Scene
@@ -11,17 +12,19 @@ class Scene
 private:
     /* data */
 public:
-    Scene(PointLight _lights, std::vector<Object> &_objects);
+    Scene(Camera _camera, AreaLight _light, std::vector<Object> &_objects);
     ~Scene();
     bool scene_intersection(Ray ray, Intersection &intersection);
 
-    std::vector<PointLight> lights;
+    Camera* camera;
+    std::vector<AreaLight> lights;
     std::vector<Object> objects;
 };
 
-Scene::Scene(PointLight _lights, std::vector<Object> &_objects)
+Scene::Scene(Camera _camera, AreaLight _light, std::vector<Object> &_objects)
 {
-    lights.push_back(_lights);
+    camera = &_camera;
+    lights.push_back(_light);
     objects = _objects;
 }
 
