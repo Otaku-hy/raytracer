@@ -16,7 +16,7 @@ public:
     ~Scene();
     bool scene_intersection(Ray ray, Intersection &intersection);
 
-    Camera* camera;
+    Camera *camera;
     std::vector<AreaLight> lights;
     std::vector<Object> objects;
 };
@@ -42,20 +42,7 @@ bool Scene::scene_intersection(Ray ray, Intersection &intersection)
         if (objects[i].ray_intersection(ray, tmp_t) && tmp_t < intersection_t)
         {
             intersection_t = tmp_t;
-            Vector3f intersectPos = ray.origin + intersection_t * ray.dir;
-            Vector3f normal;
-            if (objects[i].type == sphere)
-            {
-                normal = (intersectPos - objects[i].center).normalized();
-            }
-            if (objects[i].type == plane)
-            {
-                normal = objects[i].norm;
-            }
-
-            intersection.pos = intersectPos;
-            intersection.norm = normal;
-            intersection.material = objects[i].material;
+            objects[i].computeIntersection(intersection, intersection_t, ray);
         }
     }
 
