@@ -1,5 +1,7 @@
 #ifndef Light_H
 #define Light_H
+
+#include "Utils.hpp"
 #include "lib/Eigen/Eigen"
 
 using namespace Eigen;
@@ -29,6 +31,7 @@ class AreaLight : public PointLight
 private:
     /* data */
 public:
+    AreaLight() = default;
     AreaLight(Vector3f _pos, Vector3f _color, float _area);
     ~AreaLight();
     Vector3f SampleLight();

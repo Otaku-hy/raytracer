@@ -4,8 +4,6 @@
 #include "lib/Eigen/Eigen"
 #include "Utils.hpp"
 
-const float PI = 3.1415926;
-
 using namespace Eigen;
 
 enum MaterialType
@@ -61,6 +59,7 @@ Vector3f Material::eval(Vector3f wi, Vector3f norm)
         break;
 
     default:
+        return Vector3f(0, 0, 0);
         break;
     }
 }
@@ -70,8 +69,9 @@ Vector3f Material::sample(Vector3f norm)
     switch (type)
     {
     case DIFFUSE:
-        float x = randomNeg(100);
-        float y = randomNeg(100);
+    {
+        float x = randomPos(100);
+        float y = randomPos(100);
         float z = randomFloat(100);
 
         Vector3f dir(x, y, z);
@@ -80,8 +80,9 @@ Vector3f Material::sample(Vector3f norm)
 
         return dir;
         break;
-
+    }
     default:
+        return Vector3f(0, 0, 0);
         break;
     }
 }
@@ -95,6 +96,7 @@ float Material::pdf()
         break;
 
     default:
+        return 0.0;
         break;
     }
 }
