@@ -13,8 +13,7 @@ class Intersection
 private:
     /* data */
 public:
-    Intersection() = default;
-    Intersection(float tMax) : t1(tMax){};
+    Intersection(float tMax = 5000) : t1(tMax){};
     ~Intersection();
 
     float t1;

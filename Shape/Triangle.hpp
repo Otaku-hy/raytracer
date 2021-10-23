@@ -16,12 +16,14 @@ private:
     /* data */
 public:
     Triangle() = default;
-    Triangle(std::shared_ptr<TriangleMesh> _mesh, int _fcount, std::shared_ptr<TransformMat> _PtoO, std::shared_ptr<TransformMat> _OtoP);
+    Triangle(std::shared_ptr<TriangleMesh> _mesh, int _fcount, std::shared_ptr<Matrix4_4> _PtoO, std::shared_ptr<Matrix4_4> _OtoP);
     ~Triangle();
 
     bool intersect(Ray &ray, float &t1, Intersection &intersection) override;
     float surfaceArea() override;
     Bound3D genBoundingBox() override;
+    Vector3f sampleShape(Vector2f randVal) override;
+    float ShapePdf() override;
 
     Vector3f getPos(size_t nVert); //num vertex
     Vector3f getNorm(size_t nVert);
@@ -33,7 +35,7 @@ public:
     int fcnt; //face count
 };
 
-Triangle::Triangle(std::shared_ptr<TriangleMesh> _mesh, int _fcnt, std::shared_ptr<TransformMat> _PtoO, std::shared_ptr<TransformMat> _OtoP) : mesh(_mesh), fcnt(_fcnt), Shapes(_OtoP, _PtoO)
+Triangle::Triangle(std::shared_ptr<TriangleMesh> _mesh, int _fcnt, std::shared_ptr<Matrix4_4> _PtoO, std::shared_ptr<Matrix4_4> _OtoP) : mesh(_mesh), fcnt(_fcnt), Shapes(_OtoP, _PtoO)
 {
 }
 
@@ -81,7 +83,7 @@ bool Triangle::intersect(Ray &ray, float &t1, Intersection &intersection)
 {
     Vector3f e0 = getPos(0) - getPos(2);
     Vector3f e1 = getPos(1) - getPos(2);
-    Vector3f Oa = ray.origin - OtoP->trans(getPos(2), Pos);
+    Vector3f Oa = ray.origin - Vector4to3(*OtoP * Vector3to4(getPos(2), POS));
 
     float detA = e0[0] * e1[1] * ray.dir[2] + e0[2] * e1[0] * ray.dir[1] + e0[1] * e1[2] * ray.dir[0] - e0[2] * e1[1] * ray.dir[0] - e0[1] * e1[0] * ray.dir[2] - e0[0] * e1[2] * ray.dir[1];
     float detU = Oa[0] * e1[1] * ray.dir[2] + Oa[2] * e1[0] * ray.dir[1] + Oa[1] * e1[2] * ray.dir[0] - Oa[2] * e1[1] * ray.dir[0] - Oa[1] * e1[0] * ray.dir[2] - Oa[0] * e1[2] * ray.dir[1];
@@ -120,9 +122,9 @@ Bound3D Triangle::genBoundingBox()
     Vector3f v1 = getPos(1);
     Vector3f v2 = getPos(2);
 
-    v0 = OtoP->trans(v0, Pos);
-    v1 = OtoP->trans(v1, Pos);
-    v2 = OtoP->trans(v2, Pos);
+    v0 = Vector4to3(*OtoP * Vector3to4(v0, POS));
+    v1 = Vector4to3(*OtoP * Vector3to4(v1, POS));
+    v2 = Vector4to3(*OtoP * Vector3to4(v2, POS));
 
     // std::cout << v0[0] << " " << v0[1] << " " << v0[2] << "\n"
     //      << v1[0] << " " << v1[1] << " " << v1[2] << "\n"
@@ -134,6 +136,18 @@ Bound3D Triangle::genBoundingBox()
     b = Union(Union(b, v1), v2);
 
     return b;
+}
+
+Vector3f Triangle::sampleShape(Vector2f randVal)
+{
+    float su0 = sqrt(randVal[0]);
+    Vector3f barycoord(1 - su0, randVal[1] * su0, (1 - randVal[1]) * su0);
+    return getPos(0) * barycoord[0] + getPos(1) * barycoord[1] + getPos(2) * barycoord[2];
+}
+
+float Triangle::ShapePdf()
+{
+    return 1.0 / surfaceArea();
 }
 
 Triangle::~Triangle()

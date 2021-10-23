@@ -1,11 +1,12 @@
 #ifndef Primitive_H
 #define Primitive_H
 
-#include "../Light.hpp"
 #include "../Material.hpp"
+#include "../Light/Light.hpp"
 #include "../Intersection.hpp"
 #include "../lib/Eigen/Eigen"
 #include "../Shape/Shapes.hpp"
+#include "../Light/AreaLight.hpp"
 #include "../Acceleration/Bounds.hpp"
 
 using namespace Eigen;

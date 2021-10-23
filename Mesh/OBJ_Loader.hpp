@@ -91,14 +91,14 @@ void Loader::loadFIle()
                     int posId, normId, uvId;
 
                     posId = std::stoi(word.substr(0, fPos));
-                    if (fPos != lPos)
+                    if (fPos+1 != lPos)
                     {
                         uvId = std::stoi(word.substr(fPos + 1, lPos - fPos - 1));
                     }
                     normId = std::stoi(word.substr(lPos + 1));
 
                     posIndex.push_back(posId);
-                    if (fPos != lPos)
+                    if (fPos+1 != lPos)
                     {
                         uvIndex.push_back(uvId);
                     }

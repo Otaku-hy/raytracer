@@ -152,4 +152,9 @@ Vector2f Floor(Vector2f v)
     return Vector2f(floor(v[0]), floor(v[1]));
 }
 
+Vector3f absVec(const Vector3f &v)
+{
+    return Vector3f(abs(v[0]), abs(v[1]), abs(v[2]));
+}
+
 #endif

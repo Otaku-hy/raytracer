@@ -11,7 +11,7 @@ class Ray
 private:
     /* data */
 public:
-    Ray(Vector3f _origin = Vector3f(0, 0, 0), Vector3f _dir = Vector3f(0, 0, 0), size_t _tMax = 500, Medium *_medium = NULL) : origin(_origin), dir(_dir), tMax(_tMax),medium(_medium)  {};
+    Ray(Vector3f _origin = Vector3f(0, 0, 0), Vector3f _dir = Vector3f(0, 0, 0), size_t _tMax = 5000, Medium *_medium = NULL) : origin(_origin), dir(_dir), tMax(_tMax),medium(_medium)  {};
     ~Ray();
 
     inline Vector3f operator()(float t);

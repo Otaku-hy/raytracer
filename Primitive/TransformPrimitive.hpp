@@ -6,7 +6,7 @@
 #include "Primitive.hpp"
 
 #include "../lib/Eigen/Eigen"
-#include "../TransformMat/TransformMat.hpp"
+#include "../Matrix4_4/Matrix4_4.hpp"
 
 using namespace Eigen;
 
@@ -16,8 +16,8 @@ private:
     /* data */
 public:
     TransformPrimitive() = default;
-    TransformPrimitive(std::shared_ptr<TransformMat> _WtoP,
-                       std::shared_ptr<TransformMat> _PtoW,
+    TransformPrimitive(std::shared_ptr<Matrix4_4> _WtoP,
+                       std::shared_ptr<Matrix4_4> _PtoW,
                        std::shared_ptr<Primitive> _primitive) : WtoP(_WtoP), PtoW(_PtoW), primitive(_primitive){};
     ~TransformPrimitive();
 
@@ -26,8 +26,8 @@ public:
     Material *getMaterial() override;
     Bound3D worldBound() override;
 
-    std::shared_ptr<TransformMat> WtoP;
-    std::shared_ptr<TransformMat> PtoW;
+    std::shared_ptr<Matrix4_4> WtoP;
+    std::shared_ptr<Matrix4_4> PtoW;
     std::shared_ptr<Primitive> primitive;
 };
 
@@ -53,8 +53,8 @@ Material *TransformPrimitive::getMaterial()
 bool TransformPrimitive::intersect(Ray &ray, Intersection &intersection)
 {
     // transform ray to primitive coord
-    Vector3f dir = WtoP->trans(ray.dir, Norm);
-    Vector3f origin = WtoP->trans(ray.origin, Pos);
+    Vector3f dir = Vector4to3(*WtoP * Vector3to4(ray.dir, NORM));
+    Vector3f origin = Vector4to3(*WtoP * Vector3to4(ray.origin, POS));
 
     Ray rayT(origin, dir);
 
@@ -62,7 +62,7 @@ bool TransformPrimitive::intersect(Ray &ray, Intersection &intersection)
         return false;
 
     intersection.primitive = this;
-    intersection.pos = PtoW->trans(intersection.pos, Pos);
+    intersection.pos = Vector4to3(*PtoW * Vector3to4(intersection.pos, POS));
     return true;
 }
 

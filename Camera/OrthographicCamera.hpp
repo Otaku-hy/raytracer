@@ -14,6 +14,7 @@ public:
     OrthographicCamera(Film *_film, Bound3D bound);
     ~OrthographicCamera();
 
+    Matrix4_4 ortho;
 };
 
 OrthographicCamera::OrthographicCamera(Film *_film, Bound3D bound) : Camera(_film)
@@ -34,7 +35,7 @@ OrthographicCamera::OrthographicCamera(Film *_film, Bound3D bound) : Camera(_fil
         0, 1, 0, 0.5,
         0, 0, 1, 0.5,
         0, 0, 0, 1;
-    projection = translateToNDC * scale * translateToOrigin;
+    ortho(translateToNDC * scale * translateToOrigin);
 }
 
 OrthographicCamera::~OrthographicCamera()

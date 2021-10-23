@@ -27,18 +27,18 @@ public:
 Sphere::Sphere(Vector3f center, float radius) : center(center), r(radius)
 {
     Matrix4f mat = Matrix4f::Identity();
-    mat(0,3) = center[0];
-    mat(1,3) = center[1];
-    mat(2,3) = center[2];
-    
-    OtoP = std::make_shared<TransformMat>(mat);
-    PtoO = std::make_shared<TransformMat>(mat.inverse());
+    mat(0, 3) = center[0];
+    mat(1, 3) = center[1];
+    mat(2, 3) = center[2];
+
+    OtoP = std::make_shared<Matrix4_4>(mat);
+    PtoO = std::make_shared<Matrix4_4>(mat.inverse());
 }
 
 bool Sphere::intersect(Ray &ray, float &t1, Intersection &intersection)
 {
-    Vector3f origin = PtoO->trans(ray.origin,Pos);
-    Vector3f dir = PtoO->trans(ray.dir,Norm);
+    Vector3f origin = Vector4to3(*PtoO * Vector3to4(ray.origin, POS));
+    Vector3f dir = Vector4to3(*PtoO * Vector3to4(ray.dir, NORM));
 
     float a = dir.x() * dir.x() + dir.y() * dir.y() + dir.z() * dir.z();
     float b = 2 * (dir.x() * origin.x() + dir.y() * origin.y() + dir.z() * origin.z());
@@ -64,7 +64,7 @@ bool Sphere::intersect(Ray &ray, float &t1, Intersection &intersection)
         intersection.t1 = t1;
         intersection.happen = true;
         intersection.pos = origin + t1 * dir;
-        intersection.pos = OtoP->trans(intersection.pos,Pos);
+        intersection.pos = Vector4to3(*OtoP * Vector3to4(intersection.pos, POS));
         intersection.norm = (intersection.pos - center).normalized();
 
         return true;

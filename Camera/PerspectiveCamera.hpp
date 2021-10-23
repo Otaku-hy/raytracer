@@ -17,7 +17,9 @@ public:
     Vector3f rasterToWorld(Vector3f &v) override;
     float GenerateRay(Ray &ray, cameraSample &sample) override;
 
-    TransformMat perspective;
+    Matrix4_4 perspective;
+    Matrix4_4 NDC;
+    Matrix4_4 orthoM;
 };
 
 PerspectiveCamera::PerspectiveCamera(Film *_film, float zNear, float zFar, float aspect_ratio, float fov) : Camera(_film)
@@ -25,29 +27,30 @@ PerspectiveCamera::PerspectiveCamera(Film *_film, float zNear, float zFar, float
     float height = 2 * tan(radians(fov / 2.0)) * -zNear;
     float width = aspect_ratio * height;
 
-    Matrix4f perspectiveMat, ortho, translateToOrigin, translateToNDC;
+    Matrix4f perspectiveMat, ortho, translateToNDC;
     perspectiveMat << zNear, 0, 0, 0,
         0, zNear, 0, 0,
         0, 0, (zNear + zFar), -zNear * zFar,
         0, 0, 1, 0;
 
+    ortho << 1.0 / width, 0, 0, 0,
+        0, 1.0 / height, 0, 0,
+        0, 0, 1.0 / (zNear - zFar), -(zNear + zFar) / (2.0 * (zNear - zFar)),
+        0, 0, 0, 1;
+
     translateToNDC << 1, 0, 0, 0.5,
         0, 1, 0, 0.5,
         0, 0, 1, 0.5,
         0, 0, 0, 1;
-    ortho << 1.0 / width, 0, 0, 0,
-        0, 1.0 / height, 0, 0,
-        0, 0, 1.0 / (zNear - zFar), 0,
-        0, 0, 0, 1;
-    translateToOrigin = Matrix4f::Identity();
-    translateToOrigin(2, 3) = -(zNear + zFar) / 2.0;
 
-    perspective = perspectiveMat;
-    projection = translateToNDC * ortho * translateToOrigin;
+    perspective(translateToNDC * ortho * perspectiveMat);
+    NDC(translateToNDC);
+    orthoM(ortho);
 
     viewPort.inverse();
-    projection.inverse();
     perspective.inverse();
+    NDC.inverse();
+    orthoM.inverse();
 }
 
 PerspectiveCamera::~PerspectiveCamera()
@@ -60,6 +63,7 @@ float PerspectiveCamera::GenerateRay(Ray &ray, cameraSample &sample)
     Vector3f worldPos = rasterToWorld(rasterPos);
 
     Vector3f dir = (worldPos - cameraPos).normalized();
+    // std::cout << dir << std::endl;
 
     ray.origin = cameraPos;
     ray.dir = dir;
@@ -67,9 +71,10 @@ float PerspectiveCamera::GenerateRay(Ray &ray, cameraSample &sample)
     return 1;
 }
 
-Vector3f PerspectiveCamera::rasterToWorld(Vector3f &v)
+Vector3f PerspectiveCamera::rasterToWorld(Vector3f &v) // must repair!!!!
 {
-    return view.trans(perspective.trans(projection.trans(viewPort.trans(v, Pos), Pos), Pos), Pos);
+    // std::cout << perspective * viewPort * Vector3to4(v, POS) << std::endl;
+    return Vector4to3(view * perspective * viewPort * Vector3to4(v, POS));
 }
 
 #endif
