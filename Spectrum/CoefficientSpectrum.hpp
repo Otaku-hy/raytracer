@@ -1,7 +1,7 @@
 #ifndef CoefficientSpectrum_H
 #define CoefficientSpectrum_H
 
-#include "../Utils.hpp"
+#include "../Utils/Utils.hpp"
 #include "../lib/Eigen/Eigen"
 
 using namespace Eigen;

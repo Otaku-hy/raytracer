@@ -1,7 +1,8 @@
 #ifndef MonteCarloSample_H
 #define MonteCarloSample_H
 
-#include "../Utils.hpp"
+#include "Utils.hpp"
+
 #include "../lib/Eigen/Eigen"
 
 using namespace Eigen;
@@ -82,4 +83,15 @@ float RussianRoulette(float contrib)
     return std::min(1.0, contrib / minClampContrib);
 }
 
+float BalanceHeuristic(int nf, float fPdf, int ng, float gPdf)
+{
+    return nf * fPdf / (nf * fPdf + ng * gPdf);
+}
+
+float PowerHeuristic(int nf, float fPdf, int ng, float gPdf)
+{
+    return (nf * fPdf) * (nf * fPdf) / ((nf * fPdf + ng * gPdf) * (nf * fPdf + ng * gPdf));
+}
+
+// multiple importance sampling
 #endif

@@ -6,7 +6,8 @@ we don't need the norm parameter appears in the parameter list of the function *
 #ifndef SphericalCoordinateFunctions_H
 #define SphericalCoordinateFunctions_H
 
-#include "../Utils.hpp"
+#include "Utils.hpp"
+
 #include "../lib/Eigen/Eigen"
 
 using namespace Eigen;

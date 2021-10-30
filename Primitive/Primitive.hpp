@@ -1,12 +1,9 @@
 #ifndef Primitive_H
 #define Primitive_H
 
-#include "../Material.hpp"
-#include "../Light/Light.hpp"
-#include "../Intersection.hpp"
-#include "../lib/Eigen/Eigen"
+#include "../pbrt.hpp"
 #include "../Shape/Shapes.hpp"
-#include "../Light/AreaLight.hpp"
+#include "../Matrix4_4/Matrix4_4.hpp"
 #include "../Acceleration/Bounds.hpp"
 
 using namespace Eigen;

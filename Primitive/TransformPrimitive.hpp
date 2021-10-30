@@ -1,12 +1,7 @@
 #ifndef TransformPrimitive_H
 #define TransformPrimitive_H
 
-#include <memory>
-
 #include "Primitive.hpp"
-
-#include "../lib/Eigen/Eigen"
-#include "../Matrix4_4/Matrix4_4.hpp"
 
 using namespace Eigen;
 

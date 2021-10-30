@@ -1,8 +1,9 @@
 #ifndef Ray_H
 #define Ray_H
 
-#include "lib/Eigen/Core"
 #include "Medium.hpp"
+
+#include "pbrt.hpp"
 
 using namespace Eigen;
 

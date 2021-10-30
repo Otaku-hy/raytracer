@@ -6,7 +6,7 @@
 #include "Film.hpp"
 
 #include "../Ray.hpp"
-#include "../Utils.hpp"
+#include "../Utils/Utils.hpp"
 #include "../lib/Eigen/Eigen"
 #include "../Filter/MitchellFilter.hpp"
 #include "../Matrix4_4/Matrix4_4.hpp"

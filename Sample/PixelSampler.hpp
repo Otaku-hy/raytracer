@@ -3,8 +3,6 @@
 
 #include "Sampler.hpp"
 
-#include "../Utils.hpp"
-
 class PixelSampler : public Sampler
 {
 private:
@@ -26,7 +24,11 @@ public:
 
     Vector2f get2D() override;
     float get1D() override;
+
     void startSampler(Vector2f seed) override;
+
+    float getSample1D(const int &dimensionIndex, const int &sampleIndex) override;
+    Vector2f getSample2D(const int &dimensionIndex, const int &sampleIndex) override;
 
     Vector2i currentPixel;
     size_t sample1DDimension;
@@ -62,6 +64,16 @@ void PixelSampler::startSampler(Vector2f seed)
             samples1D[j][i] = get1D();
         }
     }
+}
+
+float PixelSampler::getSample1D(const int &dimensionIndex, const int &sampleIndex)
+{
+    return samples1D[dimensionIndex][sampleIndex];
+}
+
+Vector2f PixelSampler::getSample2D(const int &dimensionIndex, const int &sampleIndex)
+{
+    return samples2D[dimensionIndex][sampleIndex];
 }
 
 PixelSampler::~PixelSampler()

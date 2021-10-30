@@ -1,8 +1,6 @@
 #ifndef StratifiedSampler_H
 #define StratifiedSampler_H
 
-#include <iostream>
-
 #include "PixelSampler.hpp"
 
 class StratifiedSampler : public PixelSampler

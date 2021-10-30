@@ -1,9 +1,8 @@
 #ifndef MatrixFunctions_H
 #define MatrixFunctions_H
 
-#include "Matrix4_4.hpp"
-
 #include "../lib/Eigen/Eigen"
+#include "../Matrix4_4/Matrix4_4.hpp"
 
 using namespace Eigen;
 

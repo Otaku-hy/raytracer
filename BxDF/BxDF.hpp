@@ -1,9 +1,9 @@
 #ifndef BxDF_H
 #define BxDF_H
 
-#include "MonteCarloSamples.hpp"
-#include "SphericalCoordFuncs.hpp"
 #include "../lib/Eigen/Eigen"
+#include "../Utils/MonteCarloSamples.hpp"
+#include "../Utils/SphericalCoordFuncs.hpp"
 
 using namespace Eigen;
 
@@ -25,18 +25,18 @@ public:
     BxDF(BxDFType _type) : type(_type){};
     ~BxDF();
 
-    // virtual Vector3f fr(const Vector3f& w0,const Vector3f &wi) = 0;
+    virtual Vector3f fr(const Vector3f& w0,const Vector3f &wi) = 0;
     virtual Vector3f sample_fr(const Vector3f &w0, Vector3f &wi, float &pdf, const Vector2f &randValue) = 0;
-    virtual float PDF(const Vector3f &w0, const Vector3f &wi);
+    virtual float PDF(const Vector3f &w0, const Vector3f &wi) = 0;
 
     bool CheckType(BxDFType type);
 
     BxDFType type;
 };
 
-bool BxDF::CheckType(BxDFType type)
+bool BxDF::CheckType(BxDFType _type)
 {
-    if (type == type)
+    if (type == _type)
     {
         return true;
     }

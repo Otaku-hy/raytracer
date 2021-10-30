@@ -1,9 +1,8 @@
 #ifndef Fresnel_H
 #define Fresnel_H
 
-#include "SphericalCoordFuncs.hpp"
-
 #include "../lib/Eigen/Eigen"
+#include "../Utils/SphericalCoordFuncs.hpp"
 
 using namespace Eigen;
 

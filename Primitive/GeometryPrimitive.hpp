@@ -1,8 +1,6 @@
 #ifndef GPrimitive_H
 #define GPrimitive_H
 
-#include <memory>
-
 #include "Primitive.hpp"
 
 class GeometryPrimitive : public Primitive
@@ -33,6 +31,8 @@ bool GeometryPrimitive::intersect(Ray &ray, Intersection &intersection)
     if (!shape->intersect(ray, tHit, intersection))
         return false;
     intersection.primitive = this;
+    intersection.w0 = -ray.dir;
+    material->ComputeScatteringFunctions(intersection);
     return true;
 }
 

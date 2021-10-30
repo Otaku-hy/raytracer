@@ -1,8 +1,9 @@
 #ifndef Light_H
 #define Light_H
 
-#include "../lib/Eigen/Eigen"
-#include "../Intersection.hpp"
+#include "Visibility.hpp"
+
+#include "../pbrt.hpp"
 #include "../Matrix4_4/Matrix4_4.hpp"
 
 using namespace Eigen;
@@ -14,10 +15,10 @@ public:
     Light(int _nSamples, Vector3f _Le) : nSamples(_nSamples), Le(_Le){};
     ~Light();
 
-    virtual Vector3f sample_Li(const Vector2f &randVal, float &pdf, Vector3f &wi, const Intersection &ref) = 0;
-    virtual float Pdf_Li(const Vector3f &wi, const Intersection &ref)= 0; // pdf in per unit solid angle
+    virtual Vector3f Li(const Vector3f &wi, const Intersection &ref, VisibilityTester *visibility) = 0;
+    virtual Vector3f sample_Li(const Vector2f &randVal, float &pdf, Vector3f &wi, const Intersection &ref, VisibilityTester *visibility) = 0;
+    virtual float Pdf_Li(const Vector3f &wi, const Intersection &ref) = 0; // pdf in per unit solid angle
 
-    // bool VisibilityTest();
     Vector3f L();
 
     int nSamples = 1;
@@ -26,10 +27,6 @@ public:
 
 private:
 };
-
-// bool Light::VisibilityTest()
-// {
-// }
 
 Vector3f Light::L()
 {

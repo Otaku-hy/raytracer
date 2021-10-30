@@ -1,14 +1,9 @@
 #ifndef Triangle_H
 #define Triangle_H
 
-#include <vector>
-#include <string>
-#include <iostream>
-
 #include "Shapes.hpp"
 
 #include "../Mesh/TriangleMesh.hpp"
-#include "../Acceleration/Bounds.hpp"
 
 class Triangle : public Shapes
 {

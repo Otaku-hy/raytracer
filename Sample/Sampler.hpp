@@ -1,8 +1,7 @@
 #ifndef Sampler_H
 #define Sampler_H
 
-#include <vector>
-
+#include "../pbrt.hpp"
 #include "../lib/Eigen/Eigen"
 
 using namespace Eigen;
@@ -19,6 +18,8 @@ public:
     virtual Vector2f get2D() = 0;
     virtual float get1D() = 0;
     virtual void startSampler(Vector2f seed) = 0;
+    virtual float getSample1D(const int& dimensionIndex,const int& sampleIndex) = 0;
+    virtual Vector2f getSample2D(const int& dimensionIndex,const int& sampleIndex) = 0;
 
     size_t sampleNum;
     size_t sampleDimension;

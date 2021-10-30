@@ -1,12 +1,7 @@
 #ifndef Sphere_H
 #define Sphere_H
 
-#include <cmath>
-#include <memory>
-
 #include "Shapes.hpp"
-
-#include "../Utils.hpp"
 
 class Sphere : public Shapes
 {

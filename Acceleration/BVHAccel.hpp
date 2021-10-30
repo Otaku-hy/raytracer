@@ -1,12 +1,7 @@
 #ifndef BVH_H
 #define BVH_H
 
-#include <vector>
-#include <memory>
-#include <iostream>
-#include <algorithm>
-
-#include "Bounds.hpp"
+#include "../pbrt.hpp"
 #include "Aggregate.hpp"
 #include "BVHStruct.hpp"
 
@@ -17,13 +12,6 @@ enum splitMethod
     SAH,
     HLBVH
 };
-
-void printBound(const Bound3D &b)
-{
-    std::cout << b.pMin.x() << " " << b.pMin.y() << " " << b.pMin.z() << "\n"
-              << b.pMax.x() << " " << b.pMax.y() << " " << b.pMax.z() << "\n"
-              << std::endl;
-}
 
 const int nBuckets = 12;
 const int sortBit = 6;
@@ -51,7 +39,8 @@ public:
     BVHNode *SAHupperNode(int &nodeCount, int start, int end, std::vector<primitiveInfo> &nodeInfo, std::vector<BVHNode *> treeLet);
 
     int flattenBVHTree(BVHNode *node, int &currentIndex);
-    bool intersect(Ray ray, Intersection &intersection);
+
+    bool intersect(Ray &ray, Intersection &intersection);
 
     int maxPrimInNode;
     std::vector<primitiveInfo> pInfo;
@@ -493,7 +482,7 @@ int BVHAccel::flattenBVHTree(BVHNode *node, int &currentIndex)
     return nodeIndex;
 }
 
-bool BVHAccel::intersect(Ray ray, Intersection &intersection)
+bool BVHAccel::intersect(Ray &ray, Intersection &intersection)
 {
     bool intersected = false;
     int currentNode = 0;

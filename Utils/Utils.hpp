@@ -1,12 +1,15 @@
 #ifndef Utils_H
 #define Utils_H
-#include "lib/Eigen/Eigen"
+
 #include <cstdlib>
 #include <iostream>
+
+#include "../lib/Eigen/Eigen"
 
 using namespace Eigen;
 
 const float PI = 3.1415926;
+const float EPISILON = 1e-1;
 
 const int mortonBit = 10;
 const int mortonScale = (1 << mortonBit);
@@ -155,6 +158,11 @@ Vector2f Floor(Vector2f v)
 Vector3f absVec(const Vector3f &v)
 {
     return Vector3f(abs(v[0]), abs(v[1]), abs(v[2]));
+}
+
+Vector3f operator*(const Vector3f &v1, const Vector3f &v2)
+{
+    return Vector3f(v1[0] * v2[0], v1[1] * v2[1], v1[2] * v2[2]);
 }
 
 #endif

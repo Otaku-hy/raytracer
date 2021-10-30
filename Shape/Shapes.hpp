@@ -1,14 +1,11 @@
 #ifndef Shapes_H
 #define Shapes_H
 
-#include <memory>
-
+#include "../pbrt.hpp"
 #include "../Ray.hpp"
-#include "../lib/Eigen/Eigen"
-#include "../Intersection.hpp"
 #include "../Acceleration/Bounds.hpp"
 #include "../Matrix4_4/Matrix4_4.hpp"
-#include "../Matrix4_4/MatrixFunctions.hpp"
+#include "../SurfaceInteraction/Intersection.hpp"
 
 using namespace Eigen;
 

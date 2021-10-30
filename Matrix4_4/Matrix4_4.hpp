@@ -1,7 +1,7 @@
 #ifndef Matrix4_4_H
 #define Matrix4_4_H
 
-#include "../Utils.hpp"
+#include "../Utils/Utils.hpp"
 #include "../lib/Eigen/Eigen"
 
 using namespace Eigen;
