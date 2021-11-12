@@ -8,27 +8,28 @@ we don't need the norm parameter appears in the parameter list of the function *
 
 #include "Utils.hpp"
 
-#include "../lib/Eigen/Eigen"
-
-using namespace Eigen;
-
-float cosTheta(const Vector3f &w)
+inline float cosTheta(const Vector3f &w)
 {
     return w[1];
 }
 
-float cos2Theta(const Vector3f &w)
+inline float cos2Theta(const Vector3f &w)
 {
     float value = cosTheta(w);
     return value * value;
 }
 
-float sinTheta(const Vector3f &w)
+inline float sinTheta(const Vector3f &w)
 {
     return sqrt(1 - cos2Theta(w));
 }
 
-float cosPhi(const Vector3f &w)
+inline float tanTheta(const Vector3f &w)
+{
+    return sinTheta(w) / cosTheta(w);
+}
+
+inline float cosPhi(const Vector3f &w)
 {
     float r = sinTheta(w);
     if (r == 0)
@@ -39,7 +40,7 @@ float cosPhi(const Vector3f &w)
     }
 }
 
-float sinPhi(const Vector3f &w)
+inline float sinPhi(const Vector3f &w)
 {
     return sqrt(1 - pow(cosPhi(w), 2));
 }

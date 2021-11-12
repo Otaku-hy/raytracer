@@ -12,7 +12,7 @@ class TriangleMesh
 private:
     /* data */
 public:
-    TriangleMesh() = default;
+    TriangleMesh();
     TriangleMesh(size_t nTriangles, std::vector<Vector3f> &pos, std::vector<int> &posIndex) : nTriangles(nTriangles), pos(pos), posIndex(posIndex){};
 
     TriangleMesh(size_t nTriangles, std::vector<Vector3f> &pos, std::vector<Vector3f> &norm,
@@ -39,9 +39,5 @@ public:
     std::vector<int> normIndex;
     std::vector<int> uvIndex;
 };
-
-TriangleMesh::~TriangleMesh()
-{
-}
 
 #endif

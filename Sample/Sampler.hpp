@@ -2,7 +2,6 @@
 #define Sampler_H
 
 #include "../pbrt.hpp"
-#include "../lib/Eigen/Eigen"
 
 using namespace Eigen;
 
@@ -11,7 +10,7 @@ class Sampler
 private:
     /* data */
 public:
-    Sampler() = default;
+    Sampler();
     Sampler(size_t _sampleNum, size_t _sampleDimension) : sampleNum(_sampleNum), sampleDimension(_sampleNum){};
     ~Sampler();
 
@@ -25,9 +24,5 @@ public:
     size_t sampleDimension;
     size_t currentSample;
 };
-
-Sampler::~Sampler()
-{
-}
 
 #endif

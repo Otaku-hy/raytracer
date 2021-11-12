@@ -1,9 +1,7 @@
 #ifndef BxDF_H
 #define BxDF_H
 
-#include "../lib/Eigen/Eigen"
-#include "../Utils/MonteCarloSamples.hpp"
-#include "../Utils/SphericalCoordFuncs.hpp"
+#include "../pbrt.hpp"
 
 using namespace Eigen;
 
@@ -33,18 +31,5 @@ public:
 
     BxDFType type;
 };
-
-bool BxDF::CheckType(BxDFType _type)
-{
-    if (type == _type)
-    {
-        return true;
-    }
-    return false;
-}
-
-BxDF::~BxDF()
-{
-}
 
 #endif

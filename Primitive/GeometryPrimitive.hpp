@@ -2,6 +2,11 @@
 #define GPrimitive_H
 
 #include "Primitive.hpp"
+#include "../Shape/Shapes.hpp"
+#include "../Matrix4_4/Matrix4_4.hpp"
+#include "../Acceleration/Bounds.hpp"
+#include "../Material/Material.hpp"
+#include "../Interaction/SurfaceInteraction.hpp"
 
 class GeometryPrimitive : public Primitive
 {
@@ -10,12 +15,13 @@ private:
 public:
     GeometryPrimitive() = default;
     GeometryPrimitive(std::shared_ptr<Shapes> _shape,
-                      std::shared_ptr<Material> _material,
-                      std::shared_ptr<AreaLight> _light) : shape(_shape), material(_material), light(_light){};
+                       std::shared_ptr<Material> _material, std::shared_ptr<AreaLight> _light) : shape(_shape), material(_material), light(_light){};
 
     ~GeometryPrimitive();
 
-    bool intersect(Ray &ray, Intersection &intersection) override;
+    bool Intersect(const Ray &ray, SurfaceInteraction &interaction) override;
+    bool IntersectP(Ray &ray) override;
+
     Material *getMaterial() override;
     AreaLight *getAreaLight() override;
     Bound3D worldBound() override;
@@ -24,35 +30,5 @@ public:
     std::shared_ptr<Material> material;
     std::shared_ptr<AreaLight> light;
 };
-
-bool GeometryPrimitive::intersect(Ray &ray, Intersection &intersection)
-{
-    float tHit;
-    if (!shape->intersect(ray, tHit, intersection))
-        return false;
-    intersection.primitive = this;
-    intersection.w0 = -ray.dir;
-    material->ComputeScatteringFunctions(intersection);
-    return true;
-}
-
-Material *GeometryPrimitive::getMaterial()
-{
-    return material.get();
-}
-
-AreaLight *GeometryPrimitive::getAreaLight()
-{
-    return light.get();
-}
-
-Bound3D GeometryPrimitive::worldBound()
-{
-    return shape->genBoundingBox();
-}
-
-GeometryPrimitive::~GeometryPrimitive()
-{
-}
 
 #endif

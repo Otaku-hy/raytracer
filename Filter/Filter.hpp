@@ -19,9 +19,4 @@ public:
     Vector2f radius;
 };
 
-Filter::~Filter()
-{
-}
-
-
 #endif

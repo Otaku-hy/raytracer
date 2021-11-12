@@ -16,41 +16,26 @@ const int mortonScale = (1 << mortonBit);
 
 // random Functions
 
-int randomInt(int seed)
+inline int randomInt(int seed)
 {
     return rand() % seed;
 }
 
-float randomFloat(int SPP)
+inline float randomFloat(int SPP)
 {
     int n = rand() % SPP;
 
     return n / float(SPP);
 }
 
-float randomPos(int SPP)
-{
-    int n = rand() % SPP;
-
-    float rand = n / float(SPP);
-
-    rand = (rand - 0.5) * 2.0;
-
-    return rand;
-}
 //
 
-float radians(float theta)
+inline float radians(float theta)
 {
     return theta * 2 * PI / 360.0;
 }
 
-Vector3f valueProduct(Vector3f a, Vector3f b)
-{
-    return Vector3f(a.x() * b.x(), a.y() * b.y(), a.z() * b.z());
-}
-
-Vector3f toWorld(const Vector3f &a, const Vector3f &N)
+inline Vector3f toWorld(const Vector3f &a, const Vector3f &N)
 {
     Vector3f B, C;
     if (std::fabs(N.x()) > std::fabs(N.y()))
@@ -66,7 +51,7 @@ Vector3f toWorld(const Vector3f &a, const Vector3f &N)
     return a.x() * B + a.y() * C + a.z() * N;
 }
 
-float distance(Vector3f a, Vector3f b)
+inline float distance(Vector3f a, Vector3f b)
 {
     Vector3f dis = a - b;
     float d2 = dis.x() * dis.x() + dis.y() * dis.y() + dis.z() * dis.z();
@@ -74,21 +59,9 @@ float distance(Vector3f a, Vector3f b)
     return std::sqrt(d2);
 }
 
-Vector3f offset(Vector3f pos, Vector3f norm, Vector3f dir)
-{
-    if (norm.dot(dir) > 0)
-    {
-        return pos + 0.0015 * norm;
-    }
-    else
-    {
-        return pos - 0.0015 * norm;
-    }
-}
-
 // mortonCode functions
 
-uint32_t leftshift3(uint32_t x)
+inline uint32_t leftshift3(uint32_t x)
 {
     if (x == (1 << mortonBit))
         x--;
@@ -99,13 +72,13 @@ uint32_t leftshift3(uint32_t x)
     return x;
 }
 
-uint32_t encodeMorton(Vector3f v)
+inline uint32_t encodeMorton(Vector3f v)
 {
     return (leftshift3(v.z()) << 2) | (leftshift3(v.y()) << 1) | (leftshift3(v.x()));
 }
 //
 
-float clamp(float num, float low, float high)
+inline float clamp(float num, float low, float high)
 {
     if (num < low)
         return low;
@@ -114,19 +87,19 @@ float clamp(float num, float low, float high)
     return num;
 }
 
-Vector3f Clamp(const Vector3f &t1, const Vector3f &t2)
+inline Vector3f Clamp(const Vector3f &t1, const Vector3f &t2)
 {
     return Vector3f(std::max(t2[0], t1[0]), std::max(t2[1], t1[1]), std::max(t2[2], t1[2]));
 }
 
 template <typename T>
-T lerp(float t, const T &s1, const T &s2)
+inline T lerp(float t, const T &s1, const T &s2)
 {
     return s1 * (1 - t) + s2 * t;
 }
 
 template <typename T>
-void Shuffle(T *sample, int cnt, int nDimension)
+inline void Shuffle(T *sample, int cnt, int nDimension)
 {
     for (int i = 0; i < cnt; i++)
     {
@@ -135,32 +108,32 @@ void Shuffle(T *sample, int cnt, int nDimension)
     }
 }
 
-Vector2f max(const Vector2f &a, const Vector2f &b)
+inline Vector2f max(const Vector2f &a, const Vector2f &b)
 {
     return Vector2f(std::max(a[0], b[0]), std::max(a[1], b[1]));
 }
 
-Vector2f min(const Vector2f &a, const Vector2f &b)
+inline Vector2f min(const Vector2f &a, const Vector2f &b)
 {
     return Vector2f(std::min(a[0], b[0]), std::min(a[1], b[1]));
 }
 
-Vector2f Ceil(Vector2f v)
+inline Vector2f Ceil(Vector2f v)
 {
     return Vector2f(ceil(v[0]), ceil(v[1]));
 }
 
-Vector2f Floor(Vector2f v)
+inline Vector2f Floor(Vector2f v)
 {
     return Vector2f(floor(v[0]), floor(v[1]));
 }
 
-Vector3f absVec(const Vector3f &v)
+inline Vector3f absVec(const Vector3f &v)
 {
     return Vector3f(abs(v[0]), abs(v[1]), abs(v[2]));
 }
 
-Vector3f operator*(const Vector3f &v1, const Vector3f &v2)
+inline Vector3f operator*(const Vector3f &v1, const Vector3f &v2)
 {
     return Vector3f(v1[0] * v2[0], v1[1] * v2[1], v1[2] * v2[2]);
 }

@@ -1,6 +1,7 @@
 #ifndef BVHStruct_H
 #define BVHStruct_H
 
+#include "pbrt.hpp"
 #include "Bounds.hpp"
 
 struct BVHNode

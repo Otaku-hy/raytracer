@@ -12,10 +12,10 @@ enum VecType
     POS,
 };
 
-Matrix4_4 worldToShading(const Vector3f &norm)
+inline Matrix4_4 worldToShading(const Vector3f &norm)
 {
     Vector3f X;
-    if (norm[0] >= norm[1])
+    if (norm[0] >= abs(norm[1]))
     {
         X = Vector3f(-norm[2], 0, norm[0]);
     }
@@ -23,6 +23,8 @@ Matrix4_4 worldToShading(const Vector3f &norm)
     {
         X = Vector3f(0, -norm[2], norm[1]);
     }
+    // X = Vector3f(-norm[2], 0, norm[0]);
+
     X = X.normalized();
 
     Vector3f Z = X.cross(norm).normalized();
@@ -36,7 +38,7 @@ Matrix4_4 worldToShading(const Vector3f &norm)
     return Matrix4_4(worldToShading);
 }
 
-Vector4f Vector3to4(Vector3f vec, VecType type)
+inline Vector4f Vector3to4(Vector3f vec, VecType type)
 {
     if (type == POS)
     {
@@ -46,9 +48,10 @@ Vector4f Vector3to4(Vector3f vec, VecType type)
     {
         return Vector4f(vec[0], vec[1], vec[2], 0.0);
     }
+    return Vector4f(0, 0, 0, 0);
 }
 
-Vector3f Vector4to3(Vector4f vec)
+inline Vector3f Vector4to3(Vector4f vec)
 {
     return Vector3f(vec[0], vec[1], vec[2]);
 }

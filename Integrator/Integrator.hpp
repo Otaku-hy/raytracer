@@ -1,7 +1,7 @@
 #ifndef Integrator_H
 #define Integrator_H
 
-#include "../Scene/Scene.hpp"
+#include "../pbrt.hpp"
 
 class Integrator
 {
@@ -13,14 +13,5 @@ public:
 
     virtual void Render(const Scene& scene) = 0;
 };
-
-Integrator::Integrator(/* args */)
-{
-}
-
-Integrator::~Integrator()
-{
-}
-
 
 #endif

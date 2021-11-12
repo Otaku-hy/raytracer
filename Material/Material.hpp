@@ -2,7 +2,6 @@
 #define Material_H
 
 #include "../pbrt.hpp"
-#include "../BxDF/BxDF.hpp"
 
 class Material
 {
@@ -12,15 +11,7 @@ public:
     Material();
     ~Material();
 
-    virtual void ComputeScatteringFunctions(Intersection &intersection) = 0;
+    virtual void ComputeScatteringFunctions(SurfaceInteraction& interaction) = 0;
 };
-
-Material::Material(/* args */)
-{
-}
-
-Material::~Material()
-{
-}
 
 #endif
