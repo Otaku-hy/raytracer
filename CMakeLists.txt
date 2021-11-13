@@ -23,9 +23,7 @@ aux_source_directory(Scene SRC_LIST)
 aux_source_directory(Shape SRC_LIST)
 aux_source_directory(Interaction SRC_LIST)
 aux_source_directory(Mesh SRC_LIST)
-# aux_source_directory(. SRC_LIST)
-# aux_source_directory( SRC_LIST)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR})
 
-add_executable(test test.cpp ${SRC_LIST})
+add_executable(pbrt main.cpp ${SRC_LIST})
