@@ -12,9 +12,16 @@ Vector3f OrenNayar::fr(const Vector3f &w0, const Vector3f &wi)
     int minTheta = cosTheta(wi) > cosTheta(w0) ? 0 : 1;
     float sinAlpha = (minTheta == 0 ? sinTheta(w0) : sinTheta(wi));
     float tanBeta = (minTheta == 0 ? tanTheta(wi) : tanTheta(w0));
-    float deltaPhi = acos(cosPhi(wi)) - acos(cosPhi(w0));
 
-    return kd * (A + B * std::max(0.0f, cos(deltaPhi)) * sinAlpha * tanBeta) / PI;
+    float cosDeltaPhi = 0;
+    if (sinTheta(wi) > 1e-4 && sinTheta(w0) > 1e-4)
+    {
+        float sinPhiI = sinPhi(wi), cosPhiI = cosPhi(wi);
+        float sinPhi0 = sinPhi(w0), cosPhi0 = cosPhi(w0);
+        cosDeltaPhi = std::max(0.0f, cosPhiI * cosPhi0 + sinPhiI * sinPhi0);
+    }
+
+    return kd * (A + B * cosDeltaPhi * sinAlpha * tanBeta) / PI;
 }
 
 Vector3f OrenNayar::sample_fr(const Vector3f &w0, Vector3f &wi, float &pdf, const Vector2f &randValue)

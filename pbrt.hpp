@@ -41,6 +41,7 @@ class BVHAccel;
 class Bound3D;
 class Material;
 class MatteMaterial;
+class SpecularMaterial;
 class bucketInfo;
 
 const int nBuckets = 12;

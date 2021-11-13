@@ -32,27 +32,37 @@ Vector3f DirectLightIntegrator::EstimateDirect(SurfaceInteraction &interaction, 
     }
 
     // sample bxdf
-    float bxdfPdf;
-    Vector3f fr = interaction.bsdf->sample_fr(interaction.w0, wi, bxdfPdf, sampler->get2D());
-    if (bxdfPdf > 0)
-    {
-        float lightPdf = light->Pdf_Li(wi, interaction);
-        Vector3f L0 = interaction.Le(-wi);
+    float bsdfPdf;
+    Vector3f fr = interaction.bsdf->sample_fr(interaction.w0, wi, bsdfPdf, sampler->get2D());
+    bool isSpecular = interaction.bsdf->bxdf->CheckType(SPECULAR);
+    fr = fr * abs(interaction.norm.dot(wi));
 
+    if (bsdfPdf > 0)
+    {
+        float weight = 1;
+
+        float lightPdf = light->Pdf_Li(wi, interaction);
         Ray ray = interaction.SpawnRay(wi);
         SurfaceInteraction itLi;
+        bool foundItLi = scene.Intersect(ray, itLi);
 
-        scene.Intersect(ray, itLi);
+        Vector3f L0(0, 0, 0);
+        if (foundItLi && itLi.primitive->getAreaLight() == light.get())
+        {
+            L0 = itLi.Le(-wi);
+        }
         VisibilityTester visibility(interaction, itLi);
+
+        if (!isSpecular)
+        {
+            weight = PowerHeuristic(1, bsdfPdf, 1, lightPdf);
+        }
 
         if (lightPdf > 0 && !visibility.Occluded(scene))
         {
-            float weight = PowerHeuristic(1, bxdfPdf, 1, lightPdf);
-            Li += fr * L0 * weight * abs(interaction.norm.dot(wi)) / bxdfPdf;
+            Li += fr * L0 * weight / bsdfPdf;
         }
     }
-
-    // std::cout << "\n\n\n";
 
     return Li;
 }

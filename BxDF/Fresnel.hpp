@@ -2,6 +2,7 @@
 #define Fresnel_H
 
 #include "../lib/Eigen/Eigen"
+#include <iostream>
 #include "../Utils/SphericalCoordFuncs.hpp"
 
 using namespace Eigen;
@@ -26,7 +27,7 @@ public:
     FresnelDielectric(float _etaI, float _etaT) : etaI(_etaI), etaT(_etaT){};
     ~FresnelDielectric();
 
-    float Evaluate(const Vector3f &w0) override;
+    float Evaluate(const Vector3f &wi) override;
 
     float etaI, etaT;
 };

@@ -10,7 +10,7 @@ we don't need the norm parameter appears in the parameter list of the function *
 
 inline float cosTheta(const Vector3f &w)
 {
-    return w[1];
+    return clamp(w[1], -1, 1);
 }
 
 inline float cos2Theta(const Vector3f &w)
@@ -32,7 +32,7 @@ inline float tanTheta(const Vector3f &w)
 inline float cosPhi(const Vector3f &w)
 {
     float r = sinTheta(w);
-    if (r == 0)
+    if (r <= 1e-4)
         return 0;
     else
     {

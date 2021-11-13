@@ -2,7 +2,7 @@
 
 bool BxDF::CheckType(BxDFType _type)
 {
-    if (type == _type)
+    if (type & _type)
     {
         return true;
     }
