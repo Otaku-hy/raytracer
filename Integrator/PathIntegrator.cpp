@@ -23,22 +23,24 @@ Vector3f PathIntegrator::Li(Ray &ray, const Scene &scene)
             break;
         }
 
-        if (!interaction.bsdf)
-        {
-            bounds--;
-            break;
-        }
-
         Li += beta * directLightIntegrator.UniformSampleOneLight(interaction, scene);
 
         Vector3f wi, currentW0 = -ray.dir;
         float currentPdf;
-        Vector3f currentFr = interaction.bsdf->sample_fr(currentW0, wi, currentPdf, sampler->get2D());
+        BxDFType flag = ALL;
+        Vector3f currentFr = interaction.bsdf->sample_fr(currentW0, wi, currentPdf, sampler->get2D(), flag);
 
         if (currentFr.isZero() || currentPdf == 0)
         {
             break;
         }
+
+        // if (currentPdf < 0)
+        // {
+        //     std::cout << "here1"
+        //               << " ";
+        // }
+
         beta = beta * currentFr * abs(wi.dot(interaction.norm)) / currentPdf;
         ray = interaction.SpawnRay(wi);
 

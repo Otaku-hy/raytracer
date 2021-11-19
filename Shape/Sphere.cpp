@@ -87,6 +87,17 @@ Bound3D Sphere::genBoundingBox()
     return Bound3D(Vector3f(center.x() - r, center.y() - r, center.z() - r), Vector3f(center.x() + r, center.y() + r, center.z() + r));
 }
 
+Interaction Sphere::SampleShape(Vector2f randVal, const Interaction &ref)
+{
+    Interaction test;
+    return test;
+}
+
+float Sphere::ShapePdf(const Vector3f &wi, const Interaction &ref)
+{
+    return 1.0;
+}
+
 Sphere::~Sphere()
 {
 }

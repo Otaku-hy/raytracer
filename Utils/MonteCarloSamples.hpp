@@ -46,7 +46,8 @@ inline float UniformDiskPdf()
 }
 /* UniformSampleDisk Functions*/
 
-inline Vector3f CosineSampleHemisphere(const Vector2f &randValue)
+inline Vector3f 
+CosineSampleHemisphere(const Vector2f &randValue)
 {
     float phi = 2 * PI * randValue[1];
     float r = sqrt(randValue[0]);

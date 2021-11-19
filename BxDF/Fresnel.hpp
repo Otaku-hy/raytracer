@@ -15,7 +15,7 @@ public:
     Fresnel();
     ~Fresnel();
 
-    virtual float Evaluate(const Vector3f &w0) = 0;
+    virtual float Evaluate(float costhetaI) = 0;
 };
 
 class FresnelDielectric : public Fresnel
@@ -27,7 +27,7 @@ public:
     FresnelDielectric(float _etaI, float _etaT) : etaI(_etaI), etaT(_etaT){};
     ~FresnelDielectric();
 
-    float Evaluate(const Vector3f &wi) override;
+    float Evaluate(float costhetaI) override;
 
     float etaI, etaT;
 };

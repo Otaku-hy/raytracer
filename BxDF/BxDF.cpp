@@ -1,12 +1,11 @@
 #include "BxDF.hpp"
 
-bool BxDF::CheckType(BxDFType _type)
+bool BxDF::MatchType(BxDFType _type)
 {
     if (type & _type)
-    {
         return true;
-    }
-    return false;
+    else
+        return false;
 }
 
 BxDF::~BxDF()

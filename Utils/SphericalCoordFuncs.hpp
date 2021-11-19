@@ -29,6 +29,11 @@ inline float tanTheta(const Vector3f &w)
     return sinTheta(w) / cosTheta(w);
 }
 
+inline float tan2Theta(const Vector3f &w)
+{
+    return tanTheta(w) * tanTheta(w);
+}
+
 inline float cosPhi(const Vector3f &w)
 {
     float r = sinTheta(w);
@@ -43,6 +48,23 @@ inline float cosPhi(const Vector3f &w)
 inline float sinPhi(const Vector3f &w)
 {
     return sqrt(1 - pow(cosPhi(w), 2));
+}
+
+inline Vector3f SphericalDirection(float sinTheta, float cosTheta, float phi)
+{
+    Vector3f xyDir = Vector3f(1, 0, 0) * cos(phi) + Vector3f(0, 0, 1) * sin(phi);
+    xyDir *= sinTheta;
+
+    return xyDir + cosTheta * Vector3f(0, 1, 0);
+}
+
+inline bool SameHemisphere(const Vector3f &w0, const Vector3f &wi, const Vector3f &norm)
+{
+    if (w0.dot(norm) >= 0 && wi.dot(norm) >= 0)
+    {
+        return true;
+    }
+    return false;
 }
 
 #endif

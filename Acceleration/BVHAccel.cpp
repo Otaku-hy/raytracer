@@ -30,15 +30,6 @@ BVHAccel::BVHAccel(std::vector<std::shared_ptr<Primitive>> &p, splitMethod metho
 
     int orgin = 0;
     flattenBVHTree(root, orgin);
-
-    // for (int i = 0; i < linearBVH.size(); i++)
-    // {
-    //     if (linearBVH[i].nPrimitve > 0)
-    //     {
-    //         std::cout << linearBVH[i].nPrimitve << std::endl;
-    //         std::cout << linearBVH[i].primitivesOffset << std::endl;
-    //     }
-    // }
 }
 
 BVHNode *BVHAccel::recursiveBuild(int start, int end, int &nodeCount, splitMethod method, std::vector<std::shared_ptr<Primitive>> ordered_primitive)

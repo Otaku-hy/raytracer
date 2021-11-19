@@ -15,6 +15,10 @@ Vector3f Lambertain::fr(const Vector3f &w0, const Vector3f &wi)
 
 float Lambertain::PDF(const Vector3f &w0, const Vector3f &wi)
 {
+    if (!SameHemisphere(w0, wi, Vector3f(0, 1, 0)))
+    {
+        return 0;
+    }
     return CosineHemispherePdf(cosTheta(wi));
 }
 

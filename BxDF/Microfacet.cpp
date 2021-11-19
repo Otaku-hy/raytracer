@@ -1,6 +1,6 @@
 #include "Microfacet.hpp"
 
-OrenNayar::OrenNayar(Vector3f _kd, float _sigma) : kd(_kd), sigma(_sigma)
+OrenNayar::OrenNayar(Vector3f _kd, float _sigma) : BxDF(BxDFType(REFLECT | DIFFUSE)), kd(_kd), sigma(_sigma)
 {
     float rdSigma2 = radians(sigma) * radians(sigma);
     A = 1 - rdSigma2 / (2 * (rdSigma2 + 0.33));
@@ -29,7 +29,7 @@ Vector3f OrenNayar::sample_fr(const Vector3f &w0, Vector3f &wi, float &pdf, cons
     wi = CosineSampleHemisphere(randValue);
     pdf = PDF(w0, wi);
 
-    return fr(w0, wi);
+      return fr(w0, wi);
 }
 
 float OrenNayar::PDF(const Vector3f &w0, const Vector3f &wi)
@@ -38,5 +38,47 @@ float OrenNayar::PDF(const Vector3f &w0, const Vector3f &wi)
 }
 
 OrenNayar::~OrenNayar()
+{
+}
+
+MicrofacetReflect::MicrofacetReflect(const Vector3f &_R, MicrofacetDistribution *_distribution, Fresnel *_fresnel) : BxDF(BxDFType(REFLECT | GLOSSY)), R(_R), fresnel(_fresnel), distribution(_distribution)
+{
+}
+
+Vector3f MicrofacetReflect::sample_fr(const Vector3f &w0, Vector3f &wi, float &pdf, const Vector2f &randValue)
+{
+    Vector3f wh = distribution->Sample_wh(randValue, w0);
+    pdf = distribution->PDF(w0, wh) / (4 * w0.dot(wh));
+    wi = (2 * wh.dot(w0) * wh - w0).normalized();
+
+    return fr(w0, wi);
+}
+
+float MicrofacetReflect::PDF(const Vector3f &w0, const Vector3f &wi)
+{
+    Vector3f wh = (w0 + wi).normalized();
+    return distribution->PDF(w0, wh) / (4 * w0.dot(wh));
+}
+
+Vector3f MicrofacetReflect::fr(const Vector3f &w0, const Vector3f &wi)
+{
+    float costhetaI = abs(cosTheta(wi));
+    float costheta0 = abs(cosTheta(w0));
+    Vector3f wh = wi + w0;
+    if (costheta0 == 0 || costhetaI == 0)
+    {
+        return Vector3f(0, 0, 0);
+    }
+    if (wh.isZero())
+    {
+        return Vector3f(0, 0, 0);
+    }
+    wh = wh.normalized();
+
+    float fr = fresnel->Evaluate(wi.dot(wh));
+    return R * fr * distribution->D(wh) * distribution->G(wi, w0) / (4 * costhetaI * costheta0);
+}
+
+MicrofacetReflect::~MicrofacetReflect()
 {
 }

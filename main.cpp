@@ -1,9 +1,12 @@
 #include "pbrt.hpp"
 #include "OBJ_Loader.hpp"
 #include "Triangle.hpp"
+#include "Sphere.hpp"
 #include "GeometryPrimitive.hpp"
 #include "AreaLight.hpp"
 #include "MatteMaterial.hpp"
+#include "SpecularMaterial.hpp"
+#include "PlasticMaterial.hpp"
 #include "MitchellFilter.hpp"
 #include "PerspectiveCamera.hpp"
 #include "StratifiedSampler.hpp"
@@ -33,6 +36,8 @@ void Preprocess(std::vector<std::shared_ptr<Primitive>> &p, std::vector<std::sha
 
     std::shared_ptr<Matrix4_4> P = std::make_shared<Matrix4_4>();
     std::shared_ptr<Matrix4_4> O = std::make_shared<Matrix4_4>();
+
+    Vector3f lightColor(8.0f * Vector3f(0.747f + 0.058f, 0.747f + 0.258f, 0.747f) + 15.6f * Vector3f(0.740f + 0.287f, 0.740f + 0.160f, 0.740f) + 18.4f * Vector3f(0.737f + 0.642f, 0.737f + 0.159f, 0.737f));
 
     for (int i = 0; i < mesh1->nTriangles; i++)
     {
@@ -75,7 +80,6 @@ void Preprocess(std::vector<std::shared_ptr<Primitive>> &p, std::vector<std::sha
         p.push_back(gP);
     }
 
-    Vector3f lightColor(8.0f * Vector3f(0.747f + 0.058f, 0.747f + 0.258f, 0.747f) + 15.6f * Vector3f(0.740f + 0.287f, 0.740f + 0.160f, 0.740f) + 18.4f * Vector3f(0.737f + 0.642f, 0.737f + 0.159f, 0.737f));
     for (int i = 0; i < mesh6->nTriangles; i++)
     {
         std::shared_ptr<Triangle> tri(new Triangle(mesh6, i, P, O));
@@ -85,6 +89,12 @@ void Preprocess(std::vector<std::shared_ptr<Primitive>> &p, std::vector<std::sha
         p.push_back(gP);
         lights.push_back(l);
     }
+
+    std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3f(370, 385.5, 350), 50);
+    std::shared_ptr<Material> m = std::make_shared<PlasticMaterial>(Vector3f(1, 1, 1), 1.0, 1.5, 1.413/2.0);
+    std::shared_ptr<AreaLight> l = NULL;
+    std::shared_ptr<GeometryPrimitive> gP(new GeometryPrimitive(sphere, m, l));
+    p.push_back(gP);
 }
 
 void Init(std::vector<std::shared_ptr<Primitive>> &p, std::vector<std::shared_ptr<Light>> &lights)
@@ -93,7 +103,7 @@ void Init(std::vector<std::shared_ptr<Primitive>> &p, std::vector<std::shared_pt
     BVHAccel BVH(p, HLBVH, 256, nodeCount);
 
     std::shared_ptr<Filter> filter(new MitchellFilter(Vector2f(2.0f, 2.0f), 1 / 3.0f, 1 / 3.0f));
-    Film *film = new Film(Vector2i(460, 460), "image.ppm", filter);
+    Film *film = new Film(Vector2i(270, 270), "image.ppm", filter);
     std::shared_ptr<Camera> camera(new PerspectiveCamera(film, -0.1, -5000.0, 125.0 / 125.0, 38.0));
     camera->setViewMat(Vector3f(278, 273, -800), Vector3f(278, 273, 100), Vector3f(0, 1, 0));
     StratifiedSampler t(8, 8, 0, 1, true);

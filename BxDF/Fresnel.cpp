@@ -2,6 +2,8 @@
 
 float FrDielectric(float cosThetaI, float etaI, float etaT)
 {
+    if (cosThetaI == 0)
+        return 0;
     bool entering = cosThetaI > 0 ? true : false;
     if (!entering)
     {
@@ -20,6 +22,7 @@ float FrDielectric(float cosThetaI, float etaI, float etaT)
     float rv = (etaI * cosThetaI - etaT * cosThetaT) / (etaI * cosThetaI + etaT * cosThetaT);
 
     return (rp * rp + rv * rv) * 0.5;
+    // return 1;
 }
 
 Fresnel::Fresnel(/* args */)
@@ -30,9 +33,8 @@ Fresnel::~Fresnel()
 {
 }
 
-float FresnelDielectric::Evaluate(const Vector3f &wi)
+float FresnelDielectric::Evaluate(float cosThetaI)
 {
-    float cosThetaI = cosTheta(wi);
     return FrDielectric(cosThetaI, etaI, etaT);
 }
 

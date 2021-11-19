@@ -10,7 +10,7 @@ Vector3f SpecularReflection::sample_fr(const Vector3f &w0, Vector3f &wi, float &
     wi = (2 * cosTheta(w0) * Vector3f(0, 1, 0) - w0).normalized();
     pdf = 1.0;
 
-    float fr = fresnel->Evaluate(wi);
+    float fr = fresnel->Evaluate(cosTheta(wi));
     return R * fr / abs(cosTheta(wi));
 }
 
@@ -50,7 +50,7 @@ Vector3f SpecularTransmission::sample_fr(const Vector3f &w0, Vector3f &wi, float
     wi = wt_vert + cosThetaT * Vector3f(0, 1, 0);
     pdf = 1.0;
 
-    float value = (1 - fresnel->Evaluate(wi)) * etaItmp * etaTtmp / (etaTtmp * etaTtmp) / abs(cosTheta(wi));
+    float value = (1 - fresnel->Evaluate(cosThetaI)) * etaItmp * etaTtmp / (etaTtmp * etaTtmp) / abs(cosTheta(wi));
     return Vector3f(value, value, value);
 }
 
