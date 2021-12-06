@@ -49,6 +49,13 @@ Vector3f BSDF::fr(const Vector3f &wW0, const Vector3f &wWi, BxDFType type)
                 f += bxdfs[i]->fr(wL0, wLi);
             }
         }
+        else
+        {
+            if (bxdfs[i]->MatchType(type) && bxdfs[i]->MatchType(BxDFType(TRANSMISSION)))
+            {
+                f += bxdfs[i]->fr(wL0, wLi);
+            }
+        }
     }
 
     return f;
@@ -95,11 +102,6 @@ Vector3f BSDF::sample_fr(const Vector3f &wW0, Vector3f &wWi, float &pdf, const V
             if (bxdfs[i]->MatchType(type) && bxdfs[i] != bxdf)
             {
                 pdf += bxdfs[i]->PDF(wL0, wLi);
-                if (bxdfs[i]->PDF(wL0, wLi) < 0 && !SameHemisphere(wL0, wLi, gn))
-                {
-                    std::cout << "here3"
-                              << " " << bxdfs[i]->type << " ";
-                }
                 fr += bxdfs[i]->fr(wL0, wLi);
             }
         }
@@ -122,6 +124,13 @@ float BSDF::PDF(const Vector3f &wW0, const Vector3f &wWi, BxDFType type)
             if (bxdfs[i]->MatchType(type))
             {
                 pdf += bxdfs[i]->PDF(wLi, wL0);
+            }
+        }
+        else
+        {
+            if (bxdfs[i]->MatchType(type) && bxdfs[i]->MatchType(BxDFType(TRANSMISSION)))
+            {
+                pdf += bxdfs[i]->PDF(wL0, wLi);
             }
         }
     }

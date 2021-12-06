@@ -43,6 +43,7 @@ class Material;
 class MatteMaterial;
 class SpecularMaterial;
 class PlasticMaterial;
+class Metal;
 class bucketInfo;
 
 const int nBuckets = 12;

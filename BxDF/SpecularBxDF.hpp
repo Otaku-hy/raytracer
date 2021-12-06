@@ -31,14 +31,17 @@ private:
     /* data */
 public:
     SpecularTransmission() = default;
-    SpecularTransmission(Fresnel *_fresnel, float _etaA, float _etaB) : BxDF(BxDFType(SPECULAR | TRANSMISSION)), fresnel(_fresnel), etaA(_etaA), etaB(_etaB){};
+    SpecularTransmission(Fresnel *_fresnel, const Vector3f& _R, float _etaA, float _etaB);
+    //since we don't know the ray direction in BxDF, so we use etaA,etaB to represent the refract ratio out/in the material
     ~SpecularTransmission();
 
     Vector3f fr(const Vector3f &w0, const Vector3f &wi) override;
     Vector3f sample_fr(const Vector3f &w0, Vector3f &wi, float &pdf, const Vector2f &randValue) override;
+    float PDF(const Vector3f &w0, const Vector3f &wi) override;
 
     Fresnel *fresnel;
     float etaA, etaB;
+    Vector3f R;
 };
 
 #endif

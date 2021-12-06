@@ -58,6 +58,15 @@ inline Vector3f SphericalDirection(float sinTheta, float cosTheta, float phi)
     return xyDir + cosTheta * Vector3f(0, 1, 0);
 }
 
+inline bool SameHemisphere(const Vector3f &w, const Vector3f &norm)
+{
+    if (w.dot(norm) >= 0)
+        return true;
+
+    else
+        return false;
+}
+
 inline bool SameHemisphere(const Vector3f &w0, const Vector3f &wi, const Vector3f &norm)
 {
     if (w0.dot(norm) >= 0 && wi.dot(norm) >= 0)

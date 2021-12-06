@@ -35,7 +35,7 @@ Vector3f DirectLightIntegrator::EstimateDirect(SurfaceInteraction &interaction, 
         }
     }
 
-    // sample bxdf
+    //sample bxdf : something wrong with it!!!
     flag = ALL;
     float bsdfPdf;
     Vector3f fr = interaction.bsdf->sample_fr(interaction.w0, wi, bsdfPdf, sampler->get2D(), flag);

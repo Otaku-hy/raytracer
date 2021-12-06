@@ -23,7 +23,9 @@ Vector3f PathIntegrator::Li(Ray &ray, const Scene &scene)
             break;
         }
 
-        Li += beta * directLightIntegrator.UniformSampleOneLight(interaction, scene);
+        Vector3f testV = directLightIntegrator.UniformSampleOneLight(interaction, scene);
+
+        Li += beta * testV;
 
         Vector3f wi, currentW0 = -ray.dir;
         float currentPdf;
@@ -35,13 +37,8 @@ Vector3f PathIntegrator::Li(Ray &ray, const Scene &scene)
             break;
         }
 
-        // if (currentPdf < 0)
-        // {
-        //     std::cout << "here1"
-        //               << " ";
-        // }
-
         beta = beta * currentFr * abs(wi.dot(interaction.norm)) / currentPdf;
+ 
         ray = interaction.SpawnRay(wi);
 
         float contrib = RussianRoulette(beta.y());

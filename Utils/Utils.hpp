@@ -138,4 +138,27 @@ inline Vector3f operator*(const Vector3f &v1, const Vector3f &v2)
     return Vector3f(v1[0] * v2[0], v1[1] * v2[1], v1[2] * v2[2]);
 }
 
+inline Vector3f operator/(const Vector3f &v1, const Vector3f &v2)
+{
+    float x = v2[0] <= 1e-4 ? 0 : v1[0] / v2[0];
+    float y = v2[1] <= 1e-4 ? 0 : v1[1] / v2[1];
+    float z = v2[2] <= 1e-4 ? 0 : v1[2] / v2[2];
+    return Vector3f(x, y, z);
+}
+
+inline Vector3f operator+(const Vector3f &v1, const float &v)
+{
+    return Vector3f(v1[0] + v, v1[1] + v, v1[2] + v);
+}
+
+inline Vector3f operator-(const Vector3f &v1, const float &v)
+{
+    return Vector3f(v1[0] - v, v1[1] - v, v1[2] - v);
+}
+
+inline Vector3f sqrt(const Vector3f &v1)
+{
+    return Vector3f(sqrt(v1[0]), sqrt(v1[1]), sqrt(v1[2]));
+}
+
 #endif

@@ -15,7 +15,7 @@ public:
     Fresnel();
     ~Fresnel();
 
-    virtual float Evaluate(float costhetaI) = 0;
+    virtual Vector3f Evaluate(float costhetaI) = 0;
 };
 
 class FresnelDielectric : public Fresnel
@@ -27,9 +27,22 @@ public:
     FresnelDielectric(float _etaI, float _etaT) : etaI(_etaI), etaT(_etaT){};
     ~FresnelDielectric();
 
-    float Evaluate(float costhetaI) override;
+    Vector3f Evaluate(float costhetaI) override;
 
     float etaI, etaT;
+};
+
+class FresnelConductor : public Fresnel
+{
+private:
+public:
+    FresnelConductor() = default;
+    FresnelConductor(const Vector3f &_etaI, const Vector3f &_etaT, const Vector3f &_k);
+    ~FresnelConductor();
+
+    Vector3f Evaluate(float costhetaI) override;
+
+    Vector3f etaI, etaT, k;
 };
 
 #endif

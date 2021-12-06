@@ -29,11 +29,15 @@ Vector3f OrenNayar::sample_fr(const Vector3f &w0, Vector3f &wi, float &pdf, cons
     wi = CosineSampleHemisphere(randValue);
     pdf = PDF(w0, wi);
 
-      return fr(w0, wi);
+    return fr(w0, wi);
 }
 
 float OrenNayar::PDF(const Vector3f &w0, const Vector3f &wi)
 {
+    if (!SameHemisphere(w0, wi, Vector3f(0, 1, 0)))
+    {
+        return 0;
+    }
     return CosineHemispherePdf(cosTheta(wi));
 }
 
@@ -48,8 +52,8 @@ MicrofacetReflect::MicrofacetReflect(const Vector3f &_R, MicrofacetDistribution 
 Vector3f MicrofacetReflect::sample_fr(const Vector3f &w0, Vector3f &wi, float &pdf, const Vector2f &randValue)
 {
     Vector3f wh = distribution->Sample_wh(randValue, w0);
-    pdf = distribution->PDF(w0, wh) / (4 * w0.dot(wh));
     wi = (2 * wh.dot(w0) * wh - w0).normalized();
+    pdf = distribution->PDF(w0, wi, wh);
 
     return fr(w0, wi);
 }
@@ -57,7 +61,7 @@ Vector3f MicrofacetReflect::sample_fr(const Vector3f &w0, Vector3f &wi, float &p
 float MicrofacetReflect::PDF(const Vector3f &w0, const Vector3f &wi)
 {
     Vector3f wh = (w0 + wi).normalized();
-    return distribution->PDF(w0, wh) / (4 * w0.dot(wh));
+    return distribution->PDF(w0, wi, wh);
 }
 
 Vector3f MicrofacetReflect::fr(const Vector3f &w0, const Vector3f &wi)
@@ -75,7 +79,7 @@ Vector3f MicrofacetReflect::fr(const Vector3f &w0, const Vector3f &wi)
     }
     wh = wh.normalized();
 
-    float fr = fresnel->Evaluate(wi.dot(wh));
+    Vector3f fr = fresnel->Evaluate(wi.dot(wh));
     return R * fr * distribution->D(wh) * distribution->G(wi, w0) / (4 * costhetaI * costheta0);
 }
 
