@@ -10,18 +10,18 @@ float FrDielectric(float cosThetaI, float etaI, float etaT)
         std::swap(etaI, etaT);
         cosThetaI = abs(cosThetaI);
     }
-    float sinThetaI = sqrt(1 - cosThetaI * cosThetaI);
-    float sinThetaT = etaI / etaT * sinThetaI;
-    if (sinThetaT > 1)
+    float sin2ThetaI = 1 - cosThetaI * cosThetaI;
+    float sin2ThetaT = etaI * etaI / (etaT * etaT) * sin2ThetaI;
+    if (sin2ThetaT > 1)
     {
         return 1;
     }
-    float cosThetaT = sqrt(1 - sinThetaT * sinThetaT);
+    float cosThetaT = sqrt(1 - sin2ThetaT);
 
     float rp = (etaT * cosThetaI - etaI * cosThetaT) / (etaT * cosThetaI + etaI * cosThetaT);
     float rv = (etaI * cosThetaI - etaT * cosThetaT) / (etaI * cosThetaI + etaT * cosThetaT);
 
-    return (rp * rp + rv * rv) * 1.2;
+    return (rp * rp + rv * rv) * 0.5;
 }
 
 Vector3f frConductor(float cosThetaI, const Vector3f &etaI, const Vector3f &etaT, const Vector3f &k)
@@ -47,7 +47,7 @@ Vector3f frConductor(float cosThetaI, const Vector3f &etaI, const Vector3f &etaT
     Vector3f rV = (t1 - t2) / (t1 + t2);
     Vector3f rP = rV * ((t3 - t4) / (t3 + t4));
 
-    return (rV * rV + rP * rP) *0.5;
+    return (rV * rV + rP * rP) * 0.5;
 }
 
 Fresnel::Fresnel(/* args */)
@@ -64,6 +64,16 @@ Vector3f FresnelDielectric::Evaluate(float cosThetaI)
     return Vector3f(value, value, value);
 }
 
+Vector3f FresnelDielectric::getEtaI()
+{
+    return Vector3f(etaI, etaI, etaI);
+}
+
+Vector3f FresnelDielectric::getEtaT()
+{
+    return Vector3f(etaT, etaT, etaT);
+}
+
 FresnelDielectric::~FresnelDielectric()
 {
 }
@@ -75,6 +85,16 @@ FresnelConductor::FresnelConductor(const Vector3f &_etaI, const Vector3f &_etaT,
 Vector3f FresnelConductor::Evaluate(float costhetaI)
 {
     return frConductor(costhetaI, etaI, etaT, k);
+}
+
+Vector3f FresnelConductor::getEtaI()
+{
+    return etaI;
+}
+
+Vector3f FresnelConductor::getEtaT()
+{
+    return etaT;
 }
 
 FresnelConductor::~FresnelConductor()

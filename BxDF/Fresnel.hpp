@@ -16,6 +16,8 @@ public:
     ~Fresnel();
 
     virtual Vector3f Evaluate(float costhetaI) = 0;
+    virtual Vector3f getEtaI() = 0;
+    virtual Vector3f getEtaT() = 0;
 };
 
 class FresnelDielectric : public Fresnel
@@ -28,6 +30,8 @@ public:
     ~FresnelDielectric();
 
     Vector3f Evaluate(float costhetaI) override;
+    Vector3f getEtaI() override;
+    Vector3f getEtaT() override;
 
     float etaI, etaT;
 };
@@ -41,6 +45,8 @@ public:
     ~FresnelConductor();
 
     Vector3f Evaluate(float costhetaI) override;
+    Vector3f getEtaI() override;
+    Vector3f getEtaT() override;
 
     Vector3f etaI, etaT, k;
 };

@@ -38,7 +38,7 @@ Vector3f PathIntegrator::Li(Ray &ray, const Scene &scene)
         }
 
         beta = beta * currentFr * abs(wi.dot(interaction.norm)) / currentPdf;
- 
+
         ray = interaction.SpawnRay(wi);
 
         float contrib = RussianRoulette(beta.y());

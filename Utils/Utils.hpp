@@ -161,4 +161,25 @@ inline Vector3f sqrt(const Vector3f &v1)
     return Vector3f(sqrt(v1[0]), sqrt(v1[1]), sqrt(v1[2]));
 }
 
+inline bool Refract(const Vector3f &wi, float etaI, float etaT, const Vector3f &norm, Vector3f &wo)
+{
+    float cosThetaI = norm.dot(wi);
+    float sin2ThetaI = 1 - cosThetaI * cosThetaI;
+
+    float sin2ThetaT = etaI * etaI / (etaT * etaT) * sin2ThetaI;
+    // std::cout << sin2ThetaI << " "<<sinThetaT << etaI <<" " << etaT<<std::endl;
+    if (sin2ThetaT > 1)
+        return false;
+
+    float cosThetaT = std::sqrt(1 - sin2ThetaT);
+
+    float coeff = etaI / etaT * cosThetaI;
+    coeff -= wi.dot(Vector3f(0, 1, 0)) >= 0 ? cosThetaT : -cosThetaT;
+
+    wo = coeff * norm - etaI / etaT * wi;
+    wo = wo.normalized();
+
+    return true;
+}
+
 #endif

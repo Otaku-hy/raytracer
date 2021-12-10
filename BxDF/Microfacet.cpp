@@ -61,7 +61,8 @@ Vector3f MicrofacetReflect::sample_fr(const Vector3f &w0, Vector3f &wi, float &p
 float MicrofacetReflect::PDF(const Vector3f &w0, const Vector3f &wi)
 {
     Vector3f wh = (w0 + wi).normalized();
-    return distribution->PDF(w0, wi, wh);
+    float jacobi = 1 / (4 * std::abs(w0.dot(wh)));
+    return distribution->PDF(w0, wi, wh) * jacobi;
 }
 
 Vector3f MicrofacetReflect::fr(const Vector3f &w0, const Vector3f &wi)
@@ -84,5 +85,94 @@ Vector3f MicrofacetReflect::fr(const Vector3f &w0, const Vector3f &wi)
 }
 
 MicrofacetReflect::~MicrofacetReflect()
+{
+}
+
+MicrofacetTransmission::MicrofacetTransmission(const Vector3f &_R, MicrofacetDistribution *_distribution, Fresnel *_fresnel) : BxDF(BxDFType(TRANSMISSION | GLOSSY)), R(_R), distribution(_distribution), fresnel(_fresnel)
+{
+}
+
+Vector3f MicrofacetTransmission::fr(const Vector3f &w0, const Vector3f &wi)
+{
+    bool outing = w0.dot(Vector3f(0, 1, 0)) > 0 ? true : false;
+    float etaT = outing ? fresnel->getEtaI()[0] : fresnel->getEtaT()[0];
+    float etaI = outing ? fresnel->getEtaT()[0] : fresnel->getEtaI()[0];
+
+    Vector3f wh = -(etaI * wi + etaT * w0).normalized();
+    wh = wh.dot(Vector3f(0, 1, 0)) > 0 ? wh : -wh;
+
+    if (SameHemisphere(w0, wi, wh))
+    {
+        return Vector3f(0,0,0);
+    }
+
+    float cosIh = wh.dot(wi);
+    float cosOh = wh.dot(w0);
+
+    float jacobi = etaT * etaT / (etaI * cosIh + etaT * cosOh) / (etaI * cosIh + etaT * cosOh);
+
+    Vector3f tmpWi = wh.dot(wi) > 0 ? wi : -wi;
+    Vector3f tmpWo = wh.dot(w0) > 0 ? w0 : -w0;
+
+    Vector3f ft = Vector3f(1, 1, 1) - fresnel->Evaluate(wh.dot(wi));
+
+    return std::abs(cosIh * cosOh / cosTheta(wi) / cosTheta(w0)) * ft * distribution->D(wh) * distribution->G(tmpWo, tmpWi) * jacobi;
+}
+
+Vector3f MicrofacetTransmission::sample_fr(const Vector3f &w0, Vector3f &wi, float &pdf, const Vector2f &randValue)
+{
+    bool outing = w0.dot(Vector3f(0, 1, 0)) > 0 ? true : false;
+    float etaT = outing ? fresnel->getEtaI()[0] : fresnel->getEtaT()[0];
+    float etaI = outing ? fresnel->getEtaT()[0] : fresnel->getEtaI()[0];
+
+    Vector3f wh = distribution->Sample_wh(randValue, w0);
+    wh = wh.dot(Vector3f(0, 1, 0)) > 0 ? wh : -wh;
+
+    if (!Refract(w0, etaT, etaI, wh, wi))
+    {
+        return Vector3f(0, 0, 0);
+    }
+
+    Vector3f ft = Vector3f(1, 1, 1) - fresnel->Evaluate(wh.dot(wi));
+
+    float cosIh = wh.dot(wi);
+    float cosOh = wh.dot(w0);
+
+    Vector3f tmpWi = wh.dot(wi) > 0 ? wi : -wi;
+    Vector3f tmpWo = wh.dot(w0) > 0 ? w0 : -w0;
+
+    float jacobi = etaT * etaT / (etaI * cosIh + etaT * cosOh) / (etaI * cosIh + etaT * cosOh);
+
+    pdf = distribution->PDF(tmpWo, tmpWi, wh) * std::abs(cosOh) * jacobi;
+
+    return std::abs(cosIh * cosOh / cosTheta(wi) / cosTheta(w0)) * ft * distribution->D(wh) * distribution->G(tmpWo, tmpWi) * jacobi;
+}
+
+float MicrofacetTransmission::PDF(const Vector3f &w0, const Vector3f &wi)
+{
+    bool outing = w0.dot(Vector3f(0, 1, 0)) > 0 ? true : false;
+    float etaT = outing ? fresnel->getEtaI()[0] : fresnel->getEtaT()[0];
+    float etaI = outing ? fresnel->getEtaT()[0] : fresnel->getEtaI()[0];
+
+    Vector3f wh = -(etaI * wi + etaT * w0).normalized();
+    wh = wh.dot(Vector3f(0, 1, 0)) > 0 ? wh : -wh;
+
+    if (SameHemisphere(w0, wi, wh))
+    {
+        return 0;
+    }
+
+    float cosIh = wh.dot(wi);
+    float cosOh = wh.dot(w0);
+
+    float jacobi = etaT * etaT * std::abs(cosOh) / (etaI * cosIh + etaT * cosOh) / (etaI * cosIh + etaT * cosOh);
+
+    Vector3f tmpWi = wh.dot(wi) > 0 ? wi : -wi;
+    Vector3f tmpWo = wh.dot(w0) > 0 ? w0 : -w0;
+
+    return distribution->PDF(tmpWi, tmpWo, wh) * jacobi;
+}
+
+MicrofacetTransmission::~MicrofacetTransmission()
 {
 }

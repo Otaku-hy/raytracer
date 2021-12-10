@@ -31,23 +31,26 @@ float BeckmannDistribution::lambda(const Vector3f &w) //smith G
 
 float BeckmannDistribution::G(const Vector3f &w0, const Vector3f &wi)
 {
-    float lambda0, lambdaI;
-    lambda0 = lambda(w0);
-    lambdaI = lambda(wi);
+    Vector3f wh = (w0 + wi).normalized();
+    if (wh.dot(w0) < 0 || wh.dot(wi) < 0)
+    {
+        return 0;
+    }
 
-    return 1 / (1 + lambda0 + lambdaI);
+    return 1 / (1 + lambda(w0) + lambda(wi));
 }
 
 float BeckmannDistribution::G1(const Vector3f &w0, const Vector3f &wh)
 {
+    if (wh.dot(w0) < 0)
+        return 0;
+
     return 1 / (1 + lambda(w0));
 }
 
 float BeckmannDistribution::PDF(const Vector3f &w0, const Vector3f &wi, const Vector3f &wh)
 {
-    if (w0.dot(wh) < 0)
-        return 0;
-    return D(wh) * G(w0, wh) * w0.dot(wh) / (abs(cosTheta(w0)) * 4 * w0.dot(wh));
+    return D(wh) * G1(w0, wh) * w0.dot(wh) / std::abs(cosTheta(w0));
 }
 
 Vector3f BeckmannDistribution::Sample_wh(const Vector2f &randVal, const Vector3f &w0)
@@ -87,54 +90,83 @@ float GGXDistribution::D(const Vector3f &wh)
 
 float GGXDistribution::lambda(const Vector3f &w)
 {
-    return 0;
+    float tan2ThetaW = tan2Theta(w);
+    if (std::isinf(tan2ThetaW))
+    {
+        return 0;
+    }
+
+    return (std::sqrt(1 + alphaG * alphaG * tan2ThetaW) - 1) / 2.0;
 }
-/* in GGX model, we do not use lambda function to represent the percentage of inviisilible microfacet
-around the inifinitsimal area, but use the approximation that G = G1(w0) * G1(wi)
-*/
 
 float GGXDistribution::G(const Vector3f &w0, const Vector3f &wi)
 {
     Vector3f wh = (w0 + wi).normalized();
-    float g0 = G1(w0, wh);
-    float gi = G1(wi, wh);
+    if (wh.dot(wi) < 0 || wh.dot(w0) < 0)
+    {
+        return 0;
+    }
 
-    return g0 * gi;
+    float sinDphi = sinTheta(w0) * cosTheta(wi) - cosTheta(w0) * sinTheta(wi);
+    float dphi = std::asin(sinDphi);
+    if (dphi < 0)
+        dphi = -dphi;
+    float lambdaPhi = 4.41 * dphi / (4.41 * dphi + 1);
+
+    float lambdaO = lambda(w0);
+    float lambdaI = lambda(wi);
+    float maxLambda = lambdaO > lambdaI ? lambdaO : lambdaI;
+    float minLambda = lambdaO > lambdaI ? lambdaI : lambdaO;
+
+    return 1 / (1 + maxLambda + lambdaPhi * w0.dot(wi) * minLambda);
 }
 
 float GGXDistribution::G1(const Vector3f &w0, const Vector3f &wh)
 {
-    if (w0.dot(wh) * w0.dot(Vector3f(0, 1, 0)) < 0)
-    {
-        return 0;
-    }
-    float tan2ThetaV = tan2Theta(w0);
-    if (std::isinf(tan2ThetaV))
+    if (w0.dot(wh) < 0)
     {
         return 0;
     }
 
-    return 2.0 / (1 + sqrt(1 + alphaG * alphaG * tan2ThetaV));
+    return 1 / (1 + lambda(w0));
 }
 
 float GGXDistribution::PDF(const Vector3f &w0, const Vector3f &wi, const Vector3f &wh)
 {
-    float p = 1 / 4 * w0.dot(wh);
-    if (p < 0)
-        return 0;
-    return D(wh) * G(w0, wi) * w0.dot(wh) / abs(cosTheta(w0)) * p;
+    return D(wh) * G1(w0, wh) * w0.dot(wh) / abs(cosTheta(w0));
 }
 
 Vector3f GGXDistribution::Sample_wh(const Vector2f &randVal, const Vector3f &w0)
 {
-    float thetaHv = std::atan(alphaG * sqrt(randVal[0]) / sqrt(1 - randVal[0]));
-    float phiHv = 2 * PI * randVal[1];
+    // float thetaHv = std::atan(alphaG * sqrt(randVal[0]) / sqrt(1 - randVal[0]));
+    // float phiHv = 2 * PI * randVal[1];
 
-    Vector3f wh = Vector3f(std::sin(thetaHv) * cos(phiHv), std::cos(thetaHv), std::sin(thetaHv) * sin(phiHv));
-    wh = wh.normalized();
+    // Vector3f whT = Vector3f(std::sin(thetaHv) * cos(phiHv), std::cos(thetaHv), std::sin(thetaHv) * sin(phiHv));
+    // whT = whT.normalized();
 
+    // if (whT.dot(w0) < 0)
+    //     whT = -whT;
+
+    // return wh;
+
+    Vector2f slopeRand = VNDFSampler::SampleInSlopeSpace(randVal, w0);
+
+    float phi = 2 * PI * randVal[1];
+
+    Matrix2f rotate;
+    rotate << std::cos(phi), -std::sin(phi),
+        std::sin(phi), std::cos(phi);
+
+    slopeRand = rotate * slopeRand;
+    slopeRand = alphaG * slopeRand;
+
+    float scale = std::sqrt(slopeRand[0] * slopeRand[0] + slopeRand[1] * slopeRand[1] + 1);
+
+    Vector3f wh = Vector3f(-slopeRand[0], 1, -slopeRand[1]) / scale;
     if (wh.dot(w0) < 0)
+    {
         wh = -wh;
+    }
 
     return wh;
 }

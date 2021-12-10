@@ -2,6 +2,7 @@
 #define MicrofacetDistribution_H
 
 #include "pbrt.hpp"
+#include "VNDFSampler.hpp"
 
 class MicrofacetDistribution
 {
