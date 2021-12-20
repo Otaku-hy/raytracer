@@ -12,7 +12,8 @@ enum BxDFType
     DIFFUSE = 1 << 2,
     SPECULAR = 1 << 3,
     GLOSSY = 1 << 4,
-    ALL = REFLECT | TRANSMISSION | DIFFUSE | SPECULAR | GLOSSY,
+    TEST = 1 << 5,
+    ALL = REFLECT | TRANSMISSION | DIFFUSE | SPECULAR | GLOSSY | TEST,
 };
 
 class BxDF

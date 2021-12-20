@@ -5,6 +5,7 @@
 #include "../Scene/Scene.hpp"
 #include "../Light/Visibility.hpp"
 #include "../Material/BSDF.hpp"
+#include "../Material/BSSRDF.hpp"
 #include "../Interaction/SurfaceInteraction.hpp"
 
 

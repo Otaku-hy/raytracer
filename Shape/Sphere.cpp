@@ -95,7 +95,7 @@ Interaction Sphere::SampleShape(Vector2f randVal, const Interaction &ref)
 
 float Sphere::ShapePdf(const Vector3f &wi, const Interaction &ref)
 {
-    return 1.0;
+    return r;
 }
 
 Sphere::~Sphere()

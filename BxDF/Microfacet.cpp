@@ -103,7 +103,7 @@ Vector3f MicrofacetTransmission::fr(const Vector3f &w0, const Vector3f &wi)
 
     if (SameHemisphere(w0, wi, wh))
     {
-        return Vector3f(0,0,0);
+        return Vector3f(0, 0, 0);
     }
 
     float cosIh = wh.dot(wi);
@@ -145,7 +145,7 @@ Vector3f MicrofacetTransmission::sample_fr(const Vector3f &w0, Vector3f &wi, flo
 
     pdf = distribution->PDF(tmpWo, tmpWi, wh) * std::abs(cosOh) * jacobi;
 
-    return std::abs(cosIh * cosOh / cosTheta(wi) / cosTheta(w0)) * ft * distribution->D(wh) * distribution->G(tmpWo, tmpWi) * jacobi;
+    return std::abs(cosIh * cosOh / (cosTheta(wi) * cosTheta(w0))) * ft * distribution->D(wh) * distribution->G(tmpWo, tmpWi) * jacobi;
 }
 
 float MicrofacetTransmission::PDF(const Vector3f &w0, const Vector3f &wi)

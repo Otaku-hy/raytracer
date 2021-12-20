@@ -23,23 +23,61 @@ Vector3f PathIntegrator::Li(Ray &ray, const Scene &scene)
             break;
         }
 
-        Vector3f testV = directLightIntegrator.UniformSampleOneLight(interaction, scene);
-
-        Li += beta * testV;
-
-        Vector3f wi, currentW0 = -ray.dir;
-        float currentPdf;
-        BxDFType flag = ALL;
-        Vector3f currentFr = interaction.bsdf->sample_fr(currentW0, wi, currentPdf, sampler->get2D(), flag);
-
-        if (currentFr.isZero() || currentPdf == 0)
+        if (interaction.bsdf)
         {
-            break;
+            Li += beta * directLightIntegrator.UniformSampleOneLight(interaction, scene);
+
+            Vector3f wi, currentW0 = -ray.dir;
+            float currentPdf;
+            BxDFType flag = ALL;
+            Vector3f currentFr = interaction.bsdf->sample_fr(currentW0, wi, currentPdf, sampler->get2D(), flag);
+
+            if (currentFr.isZero() || currentPdf == 0)
+            {
+                break;
+            }
+
+            beta = beta * currentFr * abs(wi.dot(interaction.norm)) / currentPdf;
+
+            ray = interaction.SpawnRay(wi);
         }
 
-        beta = beta * currentFr * abs(wi.dot(interaction.norm)) / currentPdf;
+        if (interaction.bssrdf)
+        {
+            SurfaceInteraction iti;
+            Vector3f wi, currentW0 = -ray.dir;
+            float subscatterPdf;
+            Vector3f subscatterFr = interaction.bssrdf->Sample_S(scene, currentW0, iti, subscatterPdf, sampler->get2D());
 
-        ray = interaction.SpawnRay(wi);
+            if (subscatterPdf == 0 || subscatterFr.isZero())
+            {
+                if (subscatterFr.isZero())
+                {
+                    // std::cout  << "here" << std::endl;
+                }
+                break;
+            }
+
+            beta = beta * subscatterFr / subscatterPdf;
+            // std::cout << beta << std::endl;
+            Vector3f Vtest = directLightIntegrator.UniformSampleOneLight(iti, scene);
+            Li += beta * Vtest;
+            // std::cout << "Vtest: " << Vtest[0] << std::endl;
+            //           << std::endl;
+            // std::cout << Li << std::endl;
+
+            float adaptorPdf;
+            BxDFType flag = ALL;
+            Vector3f adaptorFr = iti.bsdf->sample_fr(iti.w0, wi, adaptorPdf, sampler->get2D(), flag);
+
+            if (adaptorPdf == 0 || adaptorFr.isZero())
+            {
+                break;
+            }
+
+            beta = beta * adaptorFr * std::abs(wi.dot(iti.norm)) / adaptorPdf;
+            ray = iti.SpawnRay(wi);
+        }
 
         float contrib = RussianRoulette(beta.y());
         if (bounds > 3)

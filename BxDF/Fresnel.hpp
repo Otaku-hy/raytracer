@@ -4,6 +4,7 @@
 #include "../lib/Eigen/Eigen"
 #include <iostream>
 #include "../Utils/SphericalCoordFuncs.hpp"
+#include "../Utils/FresnelFunctions.hpp"
 
 using namespace Eigen;
 

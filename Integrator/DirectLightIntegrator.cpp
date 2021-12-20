@@ -28,6 +28,12 @@ Vector3f DirectLightIntegrator::EstimateDirect(SurfaceInteraction &interaction, 
     {
         float Pdf = interaction.bsdf->PDF(interaction.w0, wi, flag);
         Vector3f fr = interaction.bsdf->fr(interaction.w0, wi, flag);
+
+        if (interaction.bsdf->bxdfs[0]->MatchType(BxDFType(TEST)))
+        {
+            // std::cout << Pdf << " " << interaction.bsdf->bxdfs[0]->PDF(interaction.w0, wi) << std::endl;
+        }
+
         if (Pdf > 0 && !visibility.Occluded(scene))
         {
             float weight = PowerHeuristic(1, lightPdf, 1, Pdf);

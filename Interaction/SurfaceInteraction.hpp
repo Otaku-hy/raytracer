@@ -12,12 +12,13 @@ class SurfaceInteraction : public Interaction
 private:
     /* data */
 public:
-    SurfaceInteraction(float _t1 = 5000, BSDF *_bsdf = NULL, Primitive *_primitive = NULL) : Interaction(_t1), bsdf(_bsdf), primitive(_primitive){};
+    SurfaceInteraction(float _t1 = 5000, BSDF *_bsdf = NULL, Primitive *_primitive = NULL,BSSRDF *_bssrdf= NULL) : Interaction(_t1), bsdf(_bsdf), primitive(_primitive) , bssrdf(_bssrdf){};
     ~SurfaceInteraction();
 
     Vector3f Le(Vector3f wi);
 
     BSDF *bsdf;
+    BSSRDF* bssrdf;
     Primitive *primitive;
 };
 

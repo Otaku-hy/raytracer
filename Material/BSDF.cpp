@@ -42,7 +42,7 @@ Vector3f BSDF::fr(const Vector3f &wW0, const Vector3f &wWi, BxDFType type)
     Vector3f f(0, 0, 0);
     for (int i = 0; i < nBxDFs; i++)
     {
-        if (reflect)
+        if (reflect || bxdfs[i]->MatchType(BxDFType(TEST)))
         {
             if (bxdfs[i]->MatchType(type))
             {
@@ -116,14 +116,15 @@ float BSDF::PDF(const Vector3f &wW0, const Vector3f &wWi, BxDFType type)
     bool reflect = wWi.dot(sn) * wW0.dot(sn) > 0 ? true : false;
     Vector3f wL0 = Vector4to3(worldTolocal * Vector3to4(wW0, NORM));
     Vector3f wLi = Vector4to3(worldTolocal * Vector3to4(wWi, NORM));
+
     float pdf = 0;
     for (int i = 0; i < nBxDFs; i++)
     {
-        if (reflect)
+        if (reflect || bxdfs[i]->MatchType(BxDFType(TEST)))
         {
             if (bxdfs[i]->MatchType(type))
             {
-                pdf += bxdfs[i]->PDF(wLi, wL0);
+                pdf += bxdfs[i]->PDF(wL0, wLi);
             }
         }
         else
@@ -134,6 +135,13 @@ float BSDF::PDF(const Vector3f &wW0, const Vector3f &wWi, BxDFType type)
             }
         }
     }
+    // if (bxdfs[0]->MatchType(BxDFType(TEST)))
+    // {
+    //     std::cout << wLi.dot(Vector3f(0, 1, 0)) << std::endl;
+    //     std::cout << pdf << std::endl
+    //               << std::endl;
+    // }
+
     return pdf;
 }
 

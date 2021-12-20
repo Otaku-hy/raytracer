@@ -9,7 +9,7 @@
 using namespace Eigen;
 
 const float PI = 3.1415926;
-const float EPISILON = 1e-1;
+const float EPISILON = 1e-2;
 
 const int mortonBit = 10;
 const int mortonScale = (1 << mortonBit);

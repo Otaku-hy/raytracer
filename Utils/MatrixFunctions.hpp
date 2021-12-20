@@ -15,13 +15,22 @@ enum VecType
 inline Matrix4_4 worldToShading(const Vector3f &norm)
 {
     Vector3f X;
-    if (norm[0] >= abs(norm[1]))
+  
+    if (norm[0] != 0 && norm[2] != 0)
     {
         X = Vector3f(-norm[2], 0, norm[0]);
     }
-    else
+    else if (norm[1] != 0 && norm[2] != 0)
     {
         X = Vector3f(0, -norm[2], norm[1]);
+    }
+    else if (norm[0] != 0 && norm[1] != 0)
+    {
+        X = Vector3f(-norm[1], norm[0], 0);
+    }
+    else
+    {
+        X = Vector3f(norm[1], norm[2], norm[0]);
     }
     // X = Vector3f(-norm[2], 0, norm[0]);
 
