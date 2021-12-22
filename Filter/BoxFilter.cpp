@@ -11,7 +11,7 @@ BoxFilter::~BoxFilter()
 
 float TriangleFilter::Evaluate(const Vector2f &p)
 {
-    return std::max(0.0f, abs(p[0])) * std::max(0.0f, abs(p[1]));
+    return std::max(0.0f, std::abs(p[0])) * std::max(0.0f, std::abs(p[1]));
 }
 
 TriangleFilter::~TriangleFilter()

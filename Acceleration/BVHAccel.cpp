@@ -11,7 +11,7 @@ BVHAccel::BVHAccel(std::vector<std::shared_ptr<Primitive>> &p, splitMethod metho
     int totalNode = 0;
     std::vector<std::shared_ptr<Primitive>> ordered_primitive;
 
-    BVHNode *root;
+    BVHNode *root = NULL;
 
     if (method == HLBVH)
     {
@@ -331,7 +331,7 @@ BVHNode *BVHAccel::SAHupperNode(int &nodeCount, int start, int end, std::vector<
 
     int split;
     int leafCost = nodeInfo.size();
-    BVHNode *node = new BVHNode();
+    BVHNode *node = new BVHNode;
 
     primitiveInfo *pmid = std::partition(&nodeInfo[start], &nodeInfo[end - 1] + 1, [&](const primitiveInfo &p)
                                          {

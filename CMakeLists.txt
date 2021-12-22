@@ -5,7 +5,7 @@ project(pbrt)
 include_directories(Acceleration BxDF Camera Filter Integrator Light lib Material
 Matrix4_4 Mesh Primitive Sample Scene Shape Interaction Utils Ray .)
 
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++11 -g)
 
 aux_source_directory(Acceleration SRC_LIST)
 aux_source_directory(BxDF SRC_LIST)
