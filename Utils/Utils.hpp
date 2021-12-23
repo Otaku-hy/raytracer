@@ -38,7 +38,7 @@ inline float radians(float theta)
 inline Vector3f toWorld(const Vector3f &a, const Vector3f &N)
 {
     Vector3f B, C;
-    if (std::fabs(N.x()) > std::fabs(N.y()))
+    if (std::abs(N.x()) > std::abs(N.y()))
     {
         C = Vector3f(N.z(), 0.0f, -N.x()).normalized();
     }
@@ -130,7 +130,7 @@ inline Vector2f Floor(Vector2f v)
 
 inline Vector3f absVec(const Vector3f &v)
 {
-    return Vector3f(abs(v[0]), abs(v[1]), abs(v[2]));
+    return Vector3f(std::abs(v[0]), std::abs(v[1]), std::abs(v[2]));
 }
 
 inline Vector3f operator*(const Vector3f &v1, const Vector3f &v2)
@@ -158,7 +158,7 @@ inline Vector3f operator-(const Vector3f &v1, const float &v)
 
 inline Vector3f sqrt(const Vector3f &v1)
 {
-    return Vector3f(sqrt(v1[0]), sqrt(v1[1]), sqrt(v1[2]));
+    return Vector3f(std::sqrt(v1[0]), std::sqrt(v1[1]), std::sqrt(v1[2]));
 }
 
 inline bool Refract(const Vector3f &wi, float etaI, float etaT, const Vector3f &norm, Vector3f &wo)

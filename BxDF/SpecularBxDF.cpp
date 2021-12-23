@@ -11,7 +11,7 @@ Vector3f SpecularReflection::sample_fr(const Vector3f &w0, Vector3f &wi, float &
     pdf = 1.0;
 
     Vector3f fr = fresnel->Evaluate(cosTheta(wi));
-    return R * fr / abs(cosTheta(wi));
+    return R * fr / std::abs(cosTheta(wi));
 }
 
 float SpecularReflection::PDF(const Vector3f &w0, const Vector3f &wi)
@@ -50,7 +50,7 @@ Vector3f SpecularTransmission::sample_fr(const Vector3f &w0, Vector3f &wi, float
         return Vector3f(0, 0, 0);
     }
 
-    float costhetaI = sqrt(1 - sinthetaI * sinthetaI);
+    float costhetaI = std::sqrt(1 - sinthetaI * sinthetaI);
     Vector3f wV = sinthetaI * (Vector3f(-w0[0], 0, -w0[2]).normalized());
     Vector3f wP = costhetaI * (Vector3f(0, -w0[1], 0).normalized());
     wi = (wV + wP).normalized();
@@ -59,7 +59,7 @@ Vector3f SpecularTransmission::sample_fr(const Vector3f &w0, Vector3f &wi, float
     pdf = 1;
     Vector3f fr = Vector3f(1, 1, 1) - fresnel->Evaluate(cosTheta(wi));
 
-    return R * fr * etaT * etaT / (etaI * etaI * abs(costhetaI));
+    return R * fr * etaT * etaT / (etaI * etaI * std::abs(costhetaI));
 }
 
 SpecularTransmission::~SpecularTransmission()

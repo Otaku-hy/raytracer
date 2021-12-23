@@ -34,7 +34,7 @@ BVHAccel::BVHAccel(std::vector<std::shared_ptr<Primitive>> &p, splitMethod metho
 
 BVHNode *BVHAccel::recursiveBuild(int start, int end, int &nodeCount, splitMethod method, std::vector<std::shared_ptr<Primitive>> ordered_primitive)
 {
-    BVHNode *node = new BVHNode();
+    BVHNode *node = new BVHNode;
 
     Bound3D b;
     for (int i = start; i < end; i++)
@@ -225,7 +225,7 @@ BVHNode *BVHAccel::emitNode(int &nodeCount, int maskBit, std::vector<primitiveMo
 {
     if (maskBit == -1 || nPrimitive <= maxPrimInNode)
     {
-        BVHNode *node = new BVHNode();
+        BVHNode *node = new BVHNode;
         Bound3D bound;
 
         for (int i = 0; i < nPrimitive; i++)
@@ -268,7 +268,7 @@ BVHNode *BVHAccel::emitNode(int &nodeCount, int maskBit, std::vector<primitiveMo
             }
             splitIndex = searchStart;
 
-            BVHNode *node = new BVHNode();
+            BVHNode *node = new BVHNode;
             node->interiorNode(emitNode(nodeCount, maskBit - 1, MortonInfo, ordered_primitive, firstMortonOffset, splitIndex - firstMortonOffset + 1), emitNode(nodeCount, maskBit - 1, MortonInfo, ordered_primitive, splitIndex + 1, nPrimitive - splitIndex + firstMortonOffset - 1), maskBit % 3);
             nodeCount++;
             return node;
@@ -404,12 +404,14 @@ int BVHAccel::flattenBVHTree(BVHNode *node, int &currentIndex)
 {
     linearBVH[currentIndex].bound = node->bound;
     linearBVH[currentIndex].nPrimitve = node->nPrimitive;
-
+    if (node->lchild)
+    {
+        linearBVH[currentIndex].nPrimitve = 0;
+    }
     int nodeIndex = currentIndex;
     ++currentIndex;
-    if (node->nPrimitive == 0)
+    if (node->lchild)
     {
-
         linearBVH[nodeIndex].splitAxis = node->splitAxis;
         flattenBVHTree(node->lchild, currentIndex);
         int childIndex = flattenBVHTree(node->rchild, currentIndex);

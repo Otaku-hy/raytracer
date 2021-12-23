@@ -67,8 +67,8 @@ float MicrofacetReflect::PDF(const Vector3f &w0, const Vector3f &wi)
 
 Vector3f MicrofacetReflect::fr(const Vector3f &w0, const Vector3f &wi)
 {
-    float costhetaI = abs(cosTheta(wi));
-    float costheta0 = abs(cosTheta(w0));
+    float costhetaI = std::abs(cosTheta(wi));
+    float costheta0 = std::abs(cosTheta(w0));
     Vector3f wh = wi + w0;
     if (costheta0 == 0 || costhetaI == 0)
     {

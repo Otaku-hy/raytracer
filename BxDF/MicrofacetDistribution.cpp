@@ -20,7 +20,7 @@ float BeckmannDistribution::D(const Vector3f &wh)
 
 float BeckmannDistribution::lambda(const Vector3f &w) //smith G
 {
-    float absTanTheta = abs(tanTheta(w));
+    float absTanTheta = std::abs(tanTheta(w));
     if (std::isinf(absTanTheta))
         return 0;
     float a = 1 / (alpha * absTanTheta);
@@ -133,7 +133,7 @@ float GGXDistribution::G1(const Vector3f &w0, const Vector3f &wh)
 
 float GGXDistribution::PDF(const Vector3f &w0, const Vector3f &wi, const Vector3f &wh)
 {
-    return D(wh) * G1(w0, wh) * w0.dot(wh) / abs(cosTheta(w0));
+    return D(wh) * G1(w0, wh) * w0.dot(wh) / std::abs(cosTheta(w0));
 }
 
 Vector3f GGXDistribution::Sample_wh(const Vector2f &randVal, const Vector3f &w0)

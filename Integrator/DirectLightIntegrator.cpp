@@ -37,7 +37,7 @@ Vector3f DirectLightIntegrator::EstimateDirect(SurfaceInteraction &interaction, 
         if (Pdf > 0 && !visibility.Occluded(scene))
         {
             float weight = PowerHeuristic(1, lightPdf, 1, Pdf);
-            Li += fr * L0 * weight * abs(interaction.norm.dot(wi)) / lightPdf;
+            Li += fr * L0 * weight * std::abs(interaction.norm.dot(wi)) / lightPdf;
         }
     }
 
@@ -50,7 +50,7 @@ Vector3f DirectLightIntegrator::EstimateDirect(SurfaceInteraction &interaction, 
     {
         isSpecular = true;
     }
-    fr = fr * abs(interaction.norm.dot(wi));
+    fr = fr * std::abs(interaction.norm.dot(wi));
 
     if (bsdfPdf > 0)
     {

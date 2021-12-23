@@ -21,7 +21,7 @@ inline float cos2Theta(const Vector3f &w)
 
 inline float sinTheta(const Vector3f &w)
 {
-    return sqrt(1 - cos2Theta(w));
+    return std::sqrt(1 - cos2Theta(w));
 }
 
 inline float tanTheta(const Vector3f &w)
@@ -47,7 +47,7 @@ inline float cosPhi(const Vector3f &w)
 
 inline float sinPhi(const Vector3f &w)
 {
-    return sqrt(1 - pow(cosPhi(w), 2));
+    return std::sqrt(1 - pow(cosPhi(w), 2));
 }
 
 inline Vector3f SphericalDirection(float sinTheta, float cosTheta, float phi)

@@ -37,7 +37,7 @@ Vector3f PathIntegrator::Li(Ray &ray, const Scene &scene)
                 break;
             }
 
-            beta = beta * currentFr * abs(wi.dot(interaction.norm)) / currentPdf;
+            beta = beta * currentFr * std::abs(wi.dot(interaction.norm)) / currentPdf;
 
             ray = interaction.SpawnRay(wi);
         }

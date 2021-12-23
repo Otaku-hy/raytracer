@@ -35,7 +35,7 @@ inline float UniformSpherePdf()
 
 inline Vector2f UniformSampleDisk(const Vector2f &randValue)
 {
-    float r = sqrt(randValue[0]);
+    float r = std::sqrt(randValue[0]);
     float theta = 2 * PI * randValue[1];
     return Vector2f(r * cos(theta), r * sin(theta));
 }
@@ -50,8 +50,8 @@ inline Vector3f
 CosineSampleHemisphere(const Vector2f &randValue)
 {
     float phi = 2 * PI * randValue[1];
-    float r = sqrt(randValue[0]);
-    float z = sqrt(std::max(0.0f, 1 - randValue[0]));
+    float r = std::sqrt(randValue[0]);
+    float z = std::sqrt(std::max(0.0f, 1 - randValue[0]));
     return Vector3f(r * cos(phi), z, r * sin(phi));
 }
 
@@ -65,7 +65,7 @@ inline Vector3f UniformSampleCone(const Vector3f &randValue, float cosThetaMax)
 {
     float phi = 2 * PI * randValue[1];
     float z = 1 - randValue[0] + randValue[0] * cosThetaMax;
-    float r = sqrt(std::max(0.0f, 1 - z * z));
+    float r = std::sqrt(std::max(0.0f, 1 - z * z));
     return Vector3f(r * cos(phi), z, r * sin(phi));
 }
 

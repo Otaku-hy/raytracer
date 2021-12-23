@@ -35,14 +35,14 @@ void Film::addContribution(Vector2f pFilm, Vector3f radiance, float sampleWeight
 
     for (int i = p0.x(); i < p1.x(); i++)
     {
-        float tx = abs(pOffset[0] - i) / filter->radius[0] * filterTableWidth;
+        float tx = std::abs(pOffset[0] - i) / filter->radius[0] * filterTableWidth;
         tx = std::min(tx, float(filterTableWidth - 1));
         itx[i - int(p0.x())] = tx;
     }
 
     for (int j = p0.y(); j < p1.y(); j++)
     {
-        float ty = abs(pOffset[1] - j) / filter->radius[1] * filterTableWidth;
+        float ty = std::abs(pOffset[1] - j) / filter->radius[1] * filterTableWidth;
         ty = std::min(ty, float(filterTableWidth - 1));
         ity[j - int(p0.y())] = ty;
     }

@@ -12,7 +12,7 @@ inline float FrDielectric(float cosThetaI, float etaI, float etaT)
     if (!entering)
     {
         std::swap(etaI, etaT);
-        cosThetaI = abs(cosThetaI);
+        cosThetaI = std::abs(cosThetaI);
     }
     float sin2ThetaI = 1 - cosThetaI * cosThetaI;
     float sin2ThetaT = etaI * etaI / (etaT * etaT) * sin2ThetaI;
@@ -20,7 +20,7 @@ inline float FrDielectric(float cosThetaI, float etaI, float etaT)
     {
         return 1;
     }
-    float cosThetaT = sqrt(1 - sin2ThetaT);
+    float cosThetaT = std::sqrt(1 - sin2ThetaT);
 
     float rp = (etaT * cosThetaI - etaI * cosThetaT) / (etaT * cosThetaI + etaI * cosThetaT);
     float rv = (etaI * cosThetaI - etaT * cosThetaT) / (etaI * cosThetaI + etaT * cosThetaT);
@@ -36,7 +36,7 @@ inline Vector3f frConductor(float cosThetaI, const Vector3f &etaI, const Vector3
     cosThetaI = clamp(cosThetaI, -1, 1);
     float cos2ThetaI = cosThetaI * cosThetaI;
     float sin2ThetaI = std::max(0.0f, 1 - cosThetaI * cosThetaI);
-    float sinThetaI = sqrt(sin2ThetaI);
+    float sinThetaI = std::sqrt(sin2ThetaI);
 
     Vector3f t0 = eta * eta - etak * etak + (-sin2ThetaI);
     Vector3f a2plusb2 = sqrt(t0 * t0 + 4 * (eta * eta * etak * etak));

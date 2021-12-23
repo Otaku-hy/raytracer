@@ -100,14 +100,14 @@ void Preprocess(std::vector<std::shared_ptr<Primitive>> &p, std::vector<std::sha
     // std::shared_ptr<GeometryPrimitive> gP(new GeometryPrimitive(sphere, m, l));
     // p.push_back(gP);
 
-    std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3f(130, 100, 225), 100);
-    // std::shared_ptr<Material> m = std::make_shared<PlasticMaterial>(Vector3f(1, 1, 1), 1.0, 1.5, 1.413/2.0);
-    std::shared_ptr<Material> m = std::make_shared<SubsurfaceMaterial>(1.0,1.3,2.3,0.03,0.8,120.0);
-    // // std::shared_ptr<Material> m = std::make_shared<Metal>(Vector3f(1, 1, 1),Vector3f(1.0,1.0,1.0),Vector3f(0.46094, 0.46094, 0.46094), Vector3f(2.9735, 2.9735, 2.9735), 0.25);
-    // // std::shared_ptr<Material> m = std::make_shared<SpecularMaterial>(Vector3f(1, 1, 1), 1.0, 1.5);
-    std::shared_ptr<AreaLight> l = NULL;
-    std::shared_ptr<GeometryPrimitive> gP(new GeometryPrimitive(sphere, m, l));
-    p.push_back(gP);
+    // std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3f(130, 100, 225), 100);
+    // // std::shared_ptr<Material> m = std::make_shared<PlasticMaterial>(Vector3f(1, 1, 1), 1.0, 1.5, 1.413/2.0);
+    // std::shared_ptr<Material> m = std::make_shared<SubsurfaceMaterial>(1.0,1.3,2.3,0.03,0.8,120.0);
+    // // // std::shared_ptr<Material> m = std::make_shared<Metal>(Vector3f(1, 1, 1),Vector3f(1.0,1.0,1.0),Vector3f(0.46094, 0.46094, 0.46094), Vector3f(2.9735, 2.9735, 2.9735), 0.25);
+    // // // std::shared_ptr<Material> m = std::make_shared<SpecularMaterial>(Vector3f(1, 1, 1), 1.0, 1.5);
+    // std::shared_ptr<AreaLight> l = NULL;
+    // std::shared_ptr<GeometryPrimitive> gP(new GeometryPrimitive(sphere, m, l));
+    // p.push_back(gP);
 
     // std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3f(270, 270, 225), 120);
     // // std::shared_ptr<Material> m = std::make_shared<Sub>(Vector3f(1, 1, 1), 1.0, 1.5, 1.413 / 2.0);
@@ -125,12 +125,12 @@ void Init(std::vector<std::shared_ptr<Primitive>> &p, std::vector<std::shared_pt
     BVHAccel BVH(p, HLBVH, 256, nodeCount);
 
     std::shared_ptr<Filter> filter(new MitchellFilter(Vector2f(2.0f, 2.0f), 1 / 3.0f, 1 / 3.0f));
-    Film *film = new Film(Vector2i(200, 200), "image.ppm", filter);
+    Film *film = new Film(Vector2i(75, 75), "image.ppm", filter);
     std::shared_ptr<Camera> camera(new PerspectiveCamera(film, -0.1, -5000.0, 125.0 / 125.0, 38.0));
     camera->setViewMat(Vector3f(278, 273, -800), Vector3f(278, 273, 100), Vector3f(0, 1, 0));
-    StratifiedSampler t(6, 6, 0, 1, true);
+    StratifiedSampler t(4, 4, 0, 1, true);
     Scene scene(std::make_shared<BVHAccel>(BVH), lights);
-    std::shared_ptr<Integrator> integrator = std::make_shared<PathIntegrator>(camera, std::make_shared<StratifiedSampler>(t), 5);
+    std::shared_ptr<Integrator> integrator = std::make_shared<PathIntegrator>(camera, std::make_shared<StratifiedSampler>(t), 4);
     integrator->Render(scene);
 }
 
@@ -140,5 +140,7 @@ int main()
     std::vector<std::shared_ptr<Light>> light;
 
     Preprocess(p, light);
+    // std::cout <<"here";
+
     Init(p, light);
 }

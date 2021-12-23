@@ -131,7 +131,7 @@ Bound3D Triangle::genBoundingBox()
 
 Interaction Triangle::SampleShape(Vector2f randVal, const Interaction &ref)
 {
-    float su0 = sqrt(randVal[0]);
+    float su0 = std::sqrt(randVal[0]);
     Vector3f barycoord(1 - su0, randVal[1] * su0, (1 - randVal[1]) * su0);
     Vector3f pos = getPos(0) * barycoord[0] + getPos(1) * barycoord[1] + getPos(2) * barycoord[2];
 
@@ -152,7 +152,7 @@ float Triangle::ShapePdf(const Vector3f &wi, const Interaction &ref)
     SurfaceInteraction interaction_Li(5000);
     if (this->Intersect(ray, tHit, interaction_Li))
     {
-        return distance(ref.pos, interaction_Li.pos) * distance(ref.pos, interaction_Li.pos) / (surfaceArea() * abs(-wi.dot(interaction_Li.norm)));
+        return distance(ref.pos, interaction_Li.pos) * distance(ref.pos, interaction_Li.pos) / (surfaceArea() * std::abs(-wi.dot(interaction_Li.norm)));
     }
     else
     {

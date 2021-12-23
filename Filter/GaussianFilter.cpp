@@ -7,7 +7,7 @@ float GaussianFilter::Evaluate(const Vector2f &p)
 
 float GaussianFilter::Gaussian(const float &x, const float &expX)
 {
-    return std::max(0.0f, float(exp(-alpha * x * x) - expX));
+    return std::max(0.0f, float(std::exp(-alpha * x * x) - expX));
 }
 
 GaussianFilter::~GaussianFilter()
