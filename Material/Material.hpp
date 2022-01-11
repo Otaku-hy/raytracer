@@ -9,8 +9,8 @@ private:
     /* data */
 public:
     Material();
-    ~Material();
-
+    
+    virtual ~Material();
     virtual void ComputeScatteringFunctions(SurfaceInteraction& interaction) = 0;
 };
 

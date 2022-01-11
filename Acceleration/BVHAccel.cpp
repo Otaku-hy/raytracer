@@ -30,6 +30,8 @@ BVHAccel::BVHAccel(std::vector<std::shared_ptr<Primitive>> &p, splitMethod metho
 
     int orgin = 0;
     flattenBVHTree(root, orgin);
+
+    DeleteTreeNode(root);
 }
 
 BVHNode *BVHAccel::recursiveBuild(int start, int end, int &nodeCount, splitMethod method, std::vector<std::shared_ptr<Primitive>> ordered_primitive)
@@ -515,4 +517,21 @@ bool BVHAccel::IntersectP(Ray &ray)
     }
 
     return intersected;
+}
+
+void DeleteTreeNode(BVHNode *node)
+{
+    if (node)
+    {
+        if (node->lchild)
+        {
+            DeleteTreeNode(node->lchild);
+        }
+
+        if (node->rchild)
+        {
+            DeleteTreeNode(node->rchild);
+        }
+        delete node;
+    }
 }

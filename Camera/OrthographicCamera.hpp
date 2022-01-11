@@ -11,8 +11,9 @@ private:
 public:
     OrthographicCamera() = default;
     OrthographicCamera(Film *_film, Bound3D bound);
-    ~OrthographicCamera();
-
+    
+    ~OrthographicCamera() override;
+    
     Matrix4_4 ortho;
 };
 

@@ -16,15 +16,6 @@ using namespace Eigen;
 class Loader
 {
 private:
-    /* data */
-public:
-    Loader() = default;
-    Loader(std::string _fileName) : fileName(_fileName){};
-    ~Loader();
-
-    void loadFile();
-    std::shared_ptr<TriangleMesh> createTriangleMesh();
-
     std::vector<Vector3f> pos;
     std::vector<Vector3f> norm;
     std::vector<Vector2f> uv;
@@ -34,10 +25,15 @@ public:
     std::vector<int> uvIndex;
 
     std::string fileName;
-
     bool hasNorm = false, hasUv = false;
-
     int tCount = 0;
+
+public:
+    Loader() = default;
+    Loader(const std::string &_fileName);
+    ~Loader();
+
+    void CreateTriangleMesh(std::shared_ptr<TriangleMesh> &mesh);
 };
 
 #endif

@@ -2,7 +2,6 @@
 #define BVHAccel_H
 
 #include "../pbrt.hpp"
-// #include "Aggregate.hpp"
 #include "BVHStruct.hpp"
 #include "Bounds.hpp"
 #include "../Primitive/Primitive.hpp"
@@ -47,5 +46,7 @@ public:
     std::vector<LinearBVHNode> linearBVH;
     bucketInfo bucket[nBuckets];
 };
+
+void DeleteTreeNode(BVHNode* node);
 
 #endif

@@ -10,8 +10,8 @@ private:
 public:
     BoxFilter() = default;
     BoxFilter(Vector2f _radius) : Filter(_radius){};
-    ~BoxFilter();
-
+    
+    ~BoxFilter() override;
     float Evaluate(const Vector2f &p) override;
 };
 
@@ -22,8 +22,8 @@ private:
 public:
     TriangleFilter() = default;
     TriangleFilter(Vector2f _radius) : Filter(_radius){};
-    ~TriangleFilter();
-
+    
+    ~TriangleFilter() override;
     float Evaluate(const Vector2f &p) override;
 };
 

@@ -86,6 +86,8 @@ Vector3f MicrofacetReflect::fr(const Vector3f &w0, const Vector3f &wi)
 
 MicrofacetReflect::~MicrofacetReflect()
 {
+    delete fresnel;
+    delete distribution;
 }
 
 MicrofacetTransmission::MicrofacetTransmission(const Vector3f &_R, MicrofacetDistribution *_distribution, Fresnel *_fresnel) : BxDF(BxDFType(TRANSMISSION | GLOSSY)), R(_R), distribution(_distribution), fresnel(_fresnel)
@@ -175,4 +177,6 @@ float MicrofacetTransmission::PDF(const Vector3f &w0, const Vector3f &wi)
 
 MicrofacetTransmission::~MicrofacetTransmission()
 {
+    delete fresnel;
+    delete distribution;
 }

@@ -12,7 +12,8 @@ private:
 public:
     PerspectiveCamera() = default;
     PerspectiveCamera(Film *_film, float zNear, float zFar, float aspect_ratio, float fov);
-    ~PerspectiveCamera();
+    
+    ~PerspectiveCamera() override;
 
     Vector3f rasterToWorld(Vector3f &v) override;
     float GenerateRay(Ray &ray, cameraSample &sample) override;

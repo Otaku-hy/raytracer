@@ -14,8 +14,8 @@ public:
         expX = std::exp(-alpha * radius[0] * radius[0]);
         expY = std::exp(-alpha * radius[1] * radius[1]);
     };
-    ~GaussianFilter();
-
+    
+    ~GaussianFilter() override;
     float Evaluate(const Vector2f &p) override;
 
     float Gaussian(const float &x, const float &expX);

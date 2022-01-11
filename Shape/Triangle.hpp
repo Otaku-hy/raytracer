@@ -17,8 +17,8 @@ private:
 public:
     Triangle() = default;
     Triangle(std::shared_ptr<TriangleMesh> _mesh, int _fcount, std::shared_ptr<Matrix4_4> _PtoO, std::shared_ptr<Matrix4_4> _OtoP);
-    ~Triangle();
-
+    
+    ~Triangle() override;
     bool Intersect(const Ray &ray, float &t1, SurfaceInteraction &interaction) override;
     bool IntersectP(Ray &ray) override;
 

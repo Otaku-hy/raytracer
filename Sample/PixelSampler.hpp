@@ -6,7 +6,11 @@
 class PixelSampler : public Sampler
 {
 private:
-    /* data */
+
+protected:
+    std::vector<std::vector<float>> samples1D;
+    std::vector<std::vector<Vector2f>> samples2D;
+
 public:
     PixelSampler() = default;
     PixelSampler(size_t _sampleNum, size_t _sample1DDimension, size_t _sample2DDimension) : sample1DDimension(_sample1DDimension), sample2DDimension(_sample2DDimension), Sampler(_sampleNum, _sample1DDimension + 2 * _sample2DDimension)
@@ -20,8 +24,8 @@ public:
             samples2D.push_back(std::vector<Vector2f>(sampleNum));
         }
     };
-    ~PixelSampler();
-
+    
+    ~PixelSampler() override;
     Vector2f get2D() override;
     float get1D() override;
 
@@ -33,9 +37,6 @@ public:
     Vector2i currentPixel;
     size_t sample1DDimension;
     size_t sample2DDimension;
-
-    std::vector<std::vector<float>> samples1D;
-    std::vector<std::vector<Vector2f>> samples2D;
 };
 
 #endif

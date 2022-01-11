@@ -8,7 +8,8 @@
 class VisibilityTester
 {
 private:
-    /* data */
+    Interaction p1, p2;
+
 public:
     VisibilityTester() = default;
     VisibilityTester(const Interaction &_p1, const Interaction &_p2);
@@ -16,7 +17,6 @@ public:
 
     bool Occluded(const Scene &scene);
 
-    Interaction p1, p2;
 };
 
 #endif

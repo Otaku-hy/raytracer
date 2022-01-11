@@ -48,12 +48,11 @@ Vector3f BSSRDF::Sample_S(const Scene &scene, const Vector3f &w0, SurfaceInterac
     // std::cout << r << " " << Radius - h << " ";
     Vector3f dr = (rVoff + rPoff).normalized();
     dr = Vector4to3(localToworld * Vector3to4(dr, NORM));
-    SurfaceInteraction itot(ito);
     if (dr.dot(ito.norm) > 0)
     {
         dr = -dr;
     }
-    Ray ray = itot.SpawnRay(dr);
+    Ray ray = ito.SpawnRay(dr);
 
     if (!scene.Intersect(ray, iti))
     {

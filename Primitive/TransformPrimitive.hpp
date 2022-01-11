@@ -17,8 +17,8 @@ public:
     TransformPrimitive(std::shared_ptr<Matrix4_4> _WtoP,
                        std::shared_ptr<Matrix4_4> _PtoW,
                        std::shared_ptr<Primitive> _primitive) : WtoP(_WtoP), PtoW(_PtoW), primitive(_primitive){};
-    ~TransformPrimitive();
-
+    
+    ~TransformPrimitive() override;
     bool Intersect(const Ray &ray, SurfaceInteraction &interaction) override;
     bool IntersectP(Ray &ray) override;
 

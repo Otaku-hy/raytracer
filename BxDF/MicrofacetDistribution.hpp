@@ -10,8 +10,8 @@ private:
     /* data */
 public:
     MicrofacetDistribution();
-    ~MicrofacetDistribution();
 
+    virtual ~MicrofacetDistribution();
     virtual float D(const Vector3f &wh) = 0;
     virtual float lambda(const Vector3f &w) = 0;
     virtual float G(const Vector3f &w0, const Vector3f &wi) = 0;
@@ -27,8 +27,8 @@ private:
     /* data */
 public:
     BeckmannDistribution(float sigma) { alpha = sqrt(2) * sigma; };
-    ~BeckmannDistribution();
 
+    ~BeckmannDistribution() override;
     float D(const Vector3f &wh) override;
     float lambda(const Vector3f &w) override;
     float G(const Vector3f &w0, const Vector3f &wi) override;
@@ -46,8 +46,8 @@ private:
     /* data */
 public:
     GGXDistribution(float _alphaG) : alphaG(_alphaG){};
-    ~GGXDistribution();
 
+    ~GGXDistribution() override;
     float D(const Vector3f &wh) override;
     float lambda(const Vector3f &w) override;
     float G(const Vector3f &w0, const Vector3f &wi) override;

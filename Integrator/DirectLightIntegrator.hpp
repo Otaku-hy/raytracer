@@ -8,7 +8,6 @@
 #include "../Material/BSSRDF.hpp"
 #include "../Interaction/SurfaceInteraction.hpp"
 
-
 class DirectLightIntegrator : public SamplerIntegrator
 {
 private:
@@ -16,12 +15,14 @@ private:
 public:
     DirectLightIntegrator(std::shared_ptr<Camera> _camera,
                           std::shared_ptr<Sampler> _sampler, int _maxDepth) : SamplerIntegrator(_camera, _sampler), maxDepth(_maxDepth){};
-    ~DirectLightIntegrator();
-
+    
+    ~DirectLightIntegrator() override;
     Vector3f Li(Ray &ray, const Scene &scene) override;
 
-    Vector3f UniformSampleOneLight(SurfaceInteraction &interaction, const Scene &scene);
-    Vector3f EstimateDirect(SurfaceInteraction &interaction, std::shared_ptr<Light> light, const Scene &scene);
+    static Vector3f UniformSampleOneLight(SurfaceInteraction &interaction, const Scene &scene, std::shared_ptr<Camera> camera,
+                                          std::shared_ptr<Sampler> sampler);
+    static Vector3f EstimateDirect(SurfaceInteraction &interaction, std::shared_ptr<Light> light, const Scene &scene, std::shared_ptr<Camera> camera,
+                                   std::shared_ptr<Sampler> sampler);
 
     int maxDepth;
 };

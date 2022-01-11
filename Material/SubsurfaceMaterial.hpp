@@ -15,8 +15,8 @@ private:
     /* data */
 public:
     SubsurfaceMaterial(float _etaA, float _etaB, float _sigma_s, float _sigma_a, float _A, float _Radius);
-    ~SubsurfaceMaterial();
-
+    
+    ~SubsurfaceMaterial() override;
     void ComputeScatteringFunctions(SurfaceInteraction &interaction) override;
 
     float etaA,etaB;

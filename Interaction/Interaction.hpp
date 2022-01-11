@@ -10,10 +10,11 @@ private:
     /* data */
 public:
     Interaction(float _t1 = 5000) : t1(_t1){};
-    ~Interaction();
+    
+    virtual ~Interaction();
 
-    Ray SpawnRay(const Interaction &p2);
-    Ray SpawnRay(const Vector3f &direction);
+    Ray SpawnRay(const Interaction &p2) const;
+    Ray SpawnRay(const Vector3f &direction) const;
     bool IsSurfaceInteraction();
 
     float t1;

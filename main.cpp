@@ -23,19 +23,14 @@ void Preprocess(std::vector<std::shared_ptr<Primitive>> &p, std::vector<std::sha
     std::shared_ptr<Loader> model4 = std::make_shared<Loader>("../Model/left.obj");
     std::shared_ptr<Loader> model5 = std::make_shared<Loader>("../Model/floor.obj");
     std::shared_ptr<Loader> model6 = std::make_shared<Loader>("../Model/light.obj");
-    model1->loadFile();
-    model2->loadFile();
-    model3->loadFile();
-    model4->loadFile();
-    model5->loadFile();
-    model6->loadFile();
 
-    std::shared_ptr<TriangleMesh> mesh1 = model1->createTriangleMesh();
-    std::shared_ptr<TriangleMesh> mesh2 = model2->createTriangleMesh();
-    std::shared_ptr<TriangleMesh> mesh3 = model3->createTriangleMesh();
-    std::shared_ptr<TriangleMesh> mesh4 = model4->createTriangleMesh();
-    std::shared_ptr<TriangleMesh> mesh5 = model5->createTriangleMesh();
-    std::shared_ptr<TriangleMesh> mesh6 = model6->createTriangleMesh();
+    std::shared_ptr<TriangleMesh> mesh1, mesh2, mesh3, mesh4, mesh5, mesh6;
+    model1->CreateTriangleMesh(mesh1);
+    model2->CreateTriangleMesh(mesh2);
+    model3->CreateTriangleMesh(mesh3);
+    model4->CreateTriangleMesh(mesh4);
+    model5->CreateTriangleMesh(mesh5);
+    model6->CreateTriangleMesh(mesh6);
 
     std::shared_ptr<Matrix4_4> P = std::make_shared<Matrix4_4>();
     std::shared_ptr<Matrix4_4> O = std::make_shared<Matrix4_4>();
@@ -100,14 +95,14 @@ void Preprocess(std::vector<std::shared_ptr<Primitive>> &p, std::vector<std::sha
     // std::shared_ptr<GeometryPrimitive> gP(new GeometryPrimitive(sphere, m, l));
     // p.push_back(gP);
 
-    // std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3f(130, 100, 225), 100);
-    // // std::shared_ptr<Material> m = std::make_shared<PlasticMaterial>(Vector3f(1, 1, 1), 1.0, 1.5, 1.413/2.0);
-    // std::shared_ptr<Material> m = std::make_shared<SubsurfaceMaterial>(1.0,1.3,2.3,0.03,0.8,120.0);
-    // // // std::shared_ptr<Material> m = std::make_shared<Metal>(Vector3f(1, 1, 1),Vector3f(1.0,1.0,1.0),Vector3f(0.46094, 0.46094, 0.46094), Vector3f(2.9735, 2.9735, 2.9735), 0.25);
-    // // // std::shared_ptr<Material> m = std::make_shared<SpecularMaterial>(Vector3f(1, 1, 1), 1.0, 1.5);
-    // std::shared_ptr<AreaLight> l = NULL;
-    // std::shared_ptr<GeometryPrimitive> gP(new GeometryPrimitive(sphere, m, l));
-    // p.push_back(gP);
+    std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3f(130, 100, 225), 100);
+    // std::shared_ptr<Material> m = std::make_shared<PlasticMaterial>(Vector3f(1, 1, 1), 1.0, 1.5, 1.413/2.0);
+    std::shared_ptr<Material> m = std::make_shared<SubsurfaceMaterial>(1.0, 1.3, 2.3, 0.03, 0.8, 120.0);
+    // // std::shared_ptr<Material> m = std::make_shared<Metal>(Vector3f(1, 1, 1),Vector3f(1.0,1.0,1.0),Vector3f(0.46094, 0.46094, 0.46094), Vector3f(2.9735, 2.9735, 2.9735), 0.25);
+    // // std::shared_ptr<Material> m = std::make_shared<SpecularMaterial>(Vector3f(1, 1, 1), 1.0, 1.5);
+    std::shared_ptr<AreaLight> l = NULL;
+    std::shared_ptr<GeometryPrimitive> gP(new GeometryPrimitive(sphere, m, l));
+    p.push_back(gP);
 
     // std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3f(270, 270, 225), 120);
     // // std::shared_ptr<Material> m = std::make_shared<Sub>(Vector3f(1, 1, 1), 1.0, 1.5, 1.413 / 2.0);
@@ -128,7 +123,7 @@ void Init(std::vector<std::shared_ptr<Primitive>> &p, std::vector<std::shared_pt
     Film *film = new Film(Vector2i(75, 75), "image.ppm", filter);
     std::shared_ptr<Camera> camera(new PerspectiveCamera(film, -0.1, -5000.0, 125.0 / 125.0, 38.0));
     camera->setViewMat(Vector3f(278, 273, -800), Vector3f(278, 273, 100), Vector3f(0, 1, 0));
-    StratifiedSampler t(4, 4, 0, 1, true);
+    StratifiedSampler t(3, 3, 0, 1, true);
     Scene scene(std::make_shared<BVHAccel>(BVH), lights);
     std::shared_ptr<Integrator> integrator = std::make_shared<PathIntegrator>(camera, std::make_shared<StratifiedSampler>(t), 4);
     integrator->Render(scene);
@@ -140,7 +135,8 @@ int main()
     std::vector<std::shared_ptr<Light>> light;
 
     Preprocess(p, light);
-    // std::cout <<"here";
 
     Init(p, light);
+
+    std::cout << "here";
 }

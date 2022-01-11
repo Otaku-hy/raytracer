@@ -21,9 +21,9 @@ PerspectiveCamera::PerspectiveCamera(Film *_film, float zNear, float zFar, float
         0, 0, 1, 0.5,
         0, 0, 0, 1;
 
-    perspective(translateToNDC * ortho * perspectiveMat);
-    NDC(translateToNDC);
-    orthoM(ortho);
+    perspective = translateToNDC * ortho * perspectiveMat;
+    NDC = translateToNDC;
+    orthoM = ortho;
 
     viewPort.inverse();
     perspective.inverse();
@@ -49,7 +49,7 @@ float PerspectiveCamera::GenerateRay(Ray &ray, cameraSample &sample)
     return 1;
 }
 
-Vector3f PerspectiveCamera::rasterToWorld(Vector3f &v) // must repair!!!!
+Vector3f PerspectiveCamera::rasterToWorld(Vector3f &v)
 {
     // std::cout << perspective * viewPort * Vector3to4(v, POS) << std::endl;
     return Vector4to3(view * perspective * viewPort * Vector3to4(v, POS));

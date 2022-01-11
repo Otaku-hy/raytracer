@@ -12,8 +12,8 @@ private:
     /* data */
 public:
     OrenNayar(Vector3f _kd, float sigma = 20.0);
-    ~OrenNayar();
-
+    
+    ~OrenNayar() override;
     Vector3f fr(const Vector3f &w0, const Vector3f &wi) override;
     Vector3f sample_fr(const Vector3f &w0, Vector3f &wi, float &pdf, const Vector2f &randValue) override;
     float PDF(const Vector3f &w0, const Vector3f &wi) override;
@@ -30,8 +30,8 @@ private:
     /* data */
 public:
     MicrofacetReflect(const Vector3f& _R,MicrofacetDistribution* _distribution,Fresnel* _fresnel);
-    ~MicrofacetReflect();
-
+    
+    ~MicrofacetReflect() override;
     Vector3f fr(const Vector3f &w0, const Vector3f &wi) override;
     Vector3f sample_fr(const Vector3f &w0, Vector3f &wi, float &pdf, const Vector2f &randValue) override;
     float PDF(const Vector3f &w0, const Vector3f &wi) override;
@@ -47,8 +47,8 @@ private:
     /* data */
 public:
     MicrofacetTransmission(const Vector3f& _R,MicrofacetDistribution* _distribution,Fresnel* _fresnel);
-    ~MicrofacetTransmission();
-
+    
+    ~MicrofacetTransmission() override;
     Vector3f fr(const Vector3f &w0, const Vector3f &wi) override;
     Vector3f sample_fr(const Vector3f &w0, Vector3f &wi, float &pdf, const Vector2f &randValue) override;
     float PDF(const Vector3f &w0, const Vector3f &wi) override;

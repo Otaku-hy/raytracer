@@ -4,8 +4,6 @@ Vector3f PathIntegrator::Li(Ray &ray, const Scene &scene)
 {
     Vector3f beta = Vector3f(1, 1, 1), Li = Vector3f(0, 0, 0);
 
-    DirectLightIntegrator directLightIntegrator(this->camera, this->sampler, this->maxDepth);
-
     for (int bounds = 0; bounds < maxDepth; bounds++)
     {
         SurfaceInteraction interaction;
@@ -25,7 +23,7 @@ Vector3f PathIntegrator::Li(Ray &ray, const Scene &scene)
 
         if (interaction.bsdf)
         {
-            Li += beta * directLightIntegrator.UniformSampleOneLight(interaction, scene);
+            Li += beta * DirectLightIntegrator::UniformSampleOneLight(interaction, scene, this->camera, this->sampler);
 
             Vector3f wi, currentW0 = -ray.dir;
             float currentPdf;
@@ -60,7 +58,7 @@ Vector3f PathIntegrator::Li(Ray &ray, const Scene &scene)
 
             beta = beta * subscatterFr / subscatterPdf;
             // std::cout << beta << std::endl;
-            Vector3f Vtest = directLightIntegrator.UniformSampleOneLight(iti, scene);
+            Vector3f Vtest = DirectLightIntegrator::UniformSampleOneLight(iti, scene, this->camera, this->sampler);
             Li += beta * Vtest;
             // std::cout << "Vtest: " << Vtest[0] << std::endl;
             //           << std::endl;

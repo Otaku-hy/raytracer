@@ -12,8 +12,8 @@ private:
 public:
     Filter() = default;
     Filter(Vector2f _radius) : radius(_radius){};
-    ~Filter();
-
+    
+    virtual ~Filter();
     virtual float Evaluate(const Vector2f &p) = 0;
 
     Vector2f radius;

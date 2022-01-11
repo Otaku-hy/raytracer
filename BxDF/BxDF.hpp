@@ -23,8 +23,8 @@ private:
 public:
     BxDF() = default;
     BxDF(BxDFType _type) : type(_type){};
-    ~BxDF();
-
+    
+    virtual ~BxDF();
     virtual Vector3f fr(const Vector3f &w0, const Vector3f &wi) = 0;
     virtual Vector3f sample_fr(const Vector3f &w0, Vector3f &wi, float &pdf, const Vector2f &randValue) = 0;
     virtual float PDF(const Vector3f &w0, const Vector3f &wi) = 0;

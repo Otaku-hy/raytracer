@@ -17,8 +17,7 @@ public:
     GeometryPrimitive(std::shared_ptr<Shapes> _shape,
                        std::shared_ptr<Material> _material, std::shared_ptr<AreaLight> _light) : shape(_shape), material(_material), light(_light){};
 
-    ~GeometryPrimitive();
-
+    ~GeometryPrimitive() override;
     bool Intersect(const Ray &ray, SurfaceInteraction &interaction) override;
     bool IntersectP(Ray &ray) override;
 

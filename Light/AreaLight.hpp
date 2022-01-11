@@ -12,8 +12,8 @@ private:
 public:
     AreaLight() = default;
     AreaLight(std::shared_ptr<Shapes> _shape, int _nSamples, Vector3f _Le) : Light(_nSamples, _Le), shape(_shape){};
-    ~AreaLight();
-
+    
+    ~AreaLight() override;
     Vector3f sample_Li(const Vector2f &randVal, float &pdf, Vector3f &wi, const Interaction &ref, VisibilityTester *visibility) override;
     float Pdf_Li(const Vector3f &wi, const Interaction &ref) override;
 

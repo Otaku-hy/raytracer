@@ -109,7 +109,7 @@ Bound3D Union(const Bound3D &b1, const Bound3D &b2)
                    Vector3f(std::max(b1.pMax.x(), b2.pMax.x()), std::max(b1.pMax.y(), b2.pMax.y()), std::max(b1.pMax.z(), b2.pMax.z())));
 }
 
-Bound3D Union(const Bound3D &b, Vector3f &p)
+Bound3D Union(const Bound3D &b,const Vector3f &p)
 {
     return Bound3D(Vector3f(std::min(b.pMin.x(), p.x()), std::min(b.pMin.y(), p.y()), std::min(b.pMin.z(), p.z())),
                    Vector3f(std::max(b.pMax.x(), p.x()), std::max(b.pMax.y(), p.y()), std::max(b.pMax.z(), p.z())));

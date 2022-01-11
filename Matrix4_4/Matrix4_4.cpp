@@ -17,9 +17,10 @@ Vector4f Matrix4_4::operator*(const Vector4f &vec)
     }
 }
 
-void Matrix4_4::operator()(const Matrix4f &matrix)
+Matrix4_4 &Matrix4_4::operator=(const Matrix4f &matrix)
 {
     mat = matrix;
+    return *this;
 }
 
 void Matrix4_4::inverse()

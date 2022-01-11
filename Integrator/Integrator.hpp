@@ -9,8 +9,7 @@ private:
     /* data */
 public:
     Integrator(/* args */);
-    ~Integrator();
-
+    virtual ~Integrator();
     virtual void Render(const Scene& scene) = 0;
 };
 

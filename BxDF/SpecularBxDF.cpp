@@ -21,6 +21,7 @@ float SpecularReflection::PDF(const Vector3f &w0, const Vector3f &wi)
 
 SpecularReflection::~SpecularReflection()
 {
+    delete fresnel;
 }
 
 SpecularTransmission::SpecularTransmission(Fresnel *_fresnel, const Vector3f &_R, float _etaA, float _etaB) : BxDF(BxDFType(SPECULAR | TRANSMISSION)), fresnel(_fresnel), R(_R), etaA(_etaA), etaB(_etaB)
@@ -64,4 +65,5 @@ Vector3f SpecularTransmission::sample_fr(const Vector3f &w0, Vector3f &wi, float
 
 SpecularTransmission::~SpecularTransmission()
 {
+    delete fresnel;
 }

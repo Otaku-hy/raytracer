@@ -11,8 +11,8 @@ private:
     /* data */
 public:
     PathIntegrator(std::shared_ptr<Camera> _camera, std::shared_ptr<Sampler> _sampler, int _maxDepth) : SamplerIntegrator(_camera, _sampler), maxDepth(_maxDepth){};
-    ~PathIntegrator();
-
+    
+    ~PathIntegrator() override;
     Vector3f Li(Ray &ray, const Scene &scene) override;
 
     int maxDepth;

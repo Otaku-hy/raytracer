@@ -10,8 +10,8 @@ private:
 public:
     MitchellFilter() = default;
     MitchellFilter(Vector2f _radius, float _B, float _C) : Filter(_radius), B(_B), C(_C){};
-    ~MitchellFilter();
-
+    
+    ~MitchellFilter() override;
     float Evaluate(const Vector2f &p) override;
 
     float Mitchell(float value);

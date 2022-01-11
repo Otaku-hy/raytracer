@@ -14,8 +14,8 @@ private:
     /* data */
 public:
     Fresnel();
-    ~Fresnel();
 
+    virtual ~Fresnel();
     virtual Vector3f Evaluate(float costhetaI) = 0;
     virtual Vector3f getEtaI() = 0;
     virtual Vector3f getEtaT() = 0;
@@ -28,8 +28,8 @@ private:
 public:
     FresnelDielectric() = default;
     FresnelDielectric(float _etaI, float _etaT) : etaI(_etaI), etaT(_etaT){};
-    ~FresnelDielectric();
 
+    ~FresnelDielectric() override;
     Vector3f Evaluate(float costhetaI) override;
     Vector3f getEtaI() override;
     Vector3f getEtaT() override;
@@ -43,8 +43,8 @@ private:
 public:
     FresnelConductor() = default;
     FresnelConductor(const Vector3f &_etaI, const Vector3f &_etaT, const Vector3f &_k);
-    ~FresnelConductor();
 
+    ~FresnelConductor() override;
     Vector3f Evaluate(float costhetaI) override;
     Vector3f getEtaI() override;
     Vector3f getEtaT() override;

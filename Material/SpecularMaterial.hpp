@@ -14,8 +14,8 @@ private:
     /* data */
 public:
     SpecularMaterial(const Vector3f &_R, const float &_etaI, const float &_etaT) : R(_R), etaI(_etaI), etaT(_etaT){};
-    ~SpecularMaterial();
-
+    
+    ~SpecularMaterial() override;
     void ComputeScatteringFunctions(SurfaceInteraction &interaction) override;
 
     Vector3f R;

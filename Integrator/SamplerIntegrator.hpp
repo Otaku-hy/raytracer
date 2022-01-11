@@ -14,8 +14,8 @@ private:
 public:
     SamplerIntegrator(std::shared_ptr<Camera> _camera,
                       std::shared_ptr<Sampler> _sampler) : camera(_camera), sampler(_sampler){};
-    ~SamplerIntegrator();
-
+    
+    ~SamplerIntegrator() override;
     void Render(const Scene &scene) override;
 
     virtual Vector3f Li(Ray &ray, const Scene &scene) = 0;

@@ -13,7 +13,8 @@ public:
 
     Matrix4_4 operator*(const Matrix4_4 &other);
     Vector4f operator*(const Vector4f &vec);
-    void operator()(const Matrix4f &matrix);
+    
+    Matrix4_4 &operator=(const Matrix4f &matrix);
 
     void inverse();
     Matrix4_4 inversed();

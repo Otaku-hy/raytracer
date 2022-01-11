@@ -6,7 +6,6 @@ SubsurfaceMaterial::SubsurfaceMaterial(float _etaA, float _etaB, float _sigma_s,
 
 void SubsurfaceMaterial::ComputeScatteringFunctions(SurfaceInteraction &interaction)
 {
-    interaction.bsdf = NULL;
     interaction.bssrdf = new BSSRDF(interaction, etaA, etaB, sigma_s, sigma_a, A, Radius);
     // std::shared_ptr<BxDF> bxdf = std::make_shared<BssrdfAdaptor>(etaA, etaB);
     // interaction.bsdf = new BSDF(interaction, bxdf);

@@ -1,6 +1,6 @@
 #include "OBJ_Loader.hpp"
 
-void Loader::loadFile()
+Loader::Loader(const std::string &_fileName) : fileName(_fileName)
 {
     std::ifstream is(fileName);
     std::string line;
@@ -70,27 +70,23 @@ void Loader::loadFile()
     }
 }
 
-std::shared_ptr<TriangleMesh> Loader::createTriangleMesh()
+Loader::~Loader()
 {
-    std::shared_ptr<TriangleMesh> mesh;
+}
+
+void Loader::CreateTriangleMesh(std::shared_ptr<TriangleMesh> &mesh)
+{
     if (hasNorm == true && hasUv == true)
     {
-        std::shared_ptr<TriangleMesh> meshT(new TriangleMesh(posIndex.size() / 3, pos, norm, uv, posIndex, normIndex, uvIndex));
-        mesh = meshT;
+        mesh = std::make_shared<TriangleMesh>(posIndex.size() / 3, pos, norm, uv, posIndex, normIndex, uvIndex);
     }
     else if (hasNorm == true)
     {
-        std::shared_ptr<TriangleMesh> meshT(new TriangleMesh(posIndex.size() / 3, pos, norm, posIndex, normIndex));
-        mesh = meshT;
+        mesh = std::make_shared<TriangleMesh>(posIndex.size() / 3, pos, norm, posIndex, normIndex);
     }
     else
     {
-        std::shared_ptr<TriangleMesh> meshT(new TriangleMesh(posIndex.size() / 3, pos, posIndex));
-        mesh = meshT;
+        mesh = std::make_shared<TriangleMesh>(posIndex.size() / 3, pos, posIndex);
     }
-    return mesh;
-}
-
-Loader::~Loader()
-{
+    return;
 }

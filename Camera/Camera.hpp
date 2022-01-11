@@ -25,8 +25,8 @@ private:
 public:
     Camera() = default;
     Camera(Film *_film);
-    ~Camera();
-
+    
+    virtual ~Camera();
     virtual float GenerateRay(Ray &ray, cameraSample &sample) = 0;
     virtual Vector3f rasterToWorld(Vector3f &v) = 0;
 

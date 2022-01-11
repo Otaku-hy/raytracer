@@ -38,7 +38,7 @@ public:
     Edges edges;
 };
 
-Bound3D Union(const Bound3D &b, Vector3f &p);
+Bound3D Union(const Bound3D &b, const Vector3f &p);
 Bound3D Union(const Bound3D &b1, const Bound3D &b2);
 
 #endif

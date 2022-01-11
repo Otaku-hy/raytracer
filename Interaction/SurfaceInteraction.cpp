@@ -12,4 +12,8 @@ Vector3f SurfaceInteraction::Le(Vector3f wi)
 
 SurfaceInteraction::~SurfaceInteraction()
 {
+    if (bsdf)
+        delete bsdf;
+    if (bssrdf)
+        delete bssrdf;
 }

@@ -18,18 +18,18 @@ than the surface, that is the direction is out the surface, or a little bit lowe
 surface, that is the direction is in the surface
 */
 
-Ray Interaction::SpawnRay(const Interaction &p2)
+Ray Interaction::SpawnRay(const Interaction &p2) const 
 {
     Vector3f direction = (p2.pos - this->pos).normalized();
     bool out = SameHemisphere(direction, norm);
     float originOffset = out ? EPISILON : -EPISILON;
-    return Ray(this->pos + this->norm * originOffset, direction, distance(this->pos, p2.pos) - 2 * EPISILON);
+    return Ray(pos + norm * originOffset, direction, distance(pos, p2.pos) - 2 * EPISILON);
 }
 
-Ray Interaction::SpawnRay(const Vector3f &direction)
+Ray Interaction::SpawnRay(const Vector3f &direction) const
 {
     Vector3f dir = direction.normalized();
     bool out = SameHemisphere(dir, norm);
     float originOffset = out ? EPISILON : -EPISILON;
-    return Ray(this->pos + this->norm * originOffset, dir);
+    return Ray(pos + norm * originOffset, dir);
 }

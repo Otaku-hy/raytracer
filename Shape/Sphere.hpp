@@ -13,8 +13,8 @@ private:
     /* data */
 public:
     Sphere(Vector3f center, float radius);
-    ~Sphere();
-
+    
+    ~Sphere() override;
     bool Intersect(const Ray &ray, float &t1, SurfaceInteraction &interaction) override;
     bool IntersectP(Ray &ray) override;
 

@@ -10,9 +10,10 @@ class Ray
 private:
     /* data */
 public:
-    Ray(Vector3f _origin = Vector3f(0, 0, 0), Vector3f _dir = Vector3f(0, 0, 0), float _tMax = 5000) : origin(_origin), dir(_dir), tMax(_tMax){};
-    ~Ray();
-
+    Ray(const Vector3f &_origin = Vector3f(0, 0, 0),const Vector3f &_dir = Vector3f(0, 0, 0), const float &_tMax = 5000) : origin(_origin), dir(_dir), tMax(_tMax){};
+    
+    virtual ~Ray();
+    
     inline Vector3f operator()(float t);
 
     Vector3f origin, dir;
@@ -25,11 +26,12 @@ class RayDifferential : public Ray
 private:
     /* data */
 public:
-    RayDifferential(Vector3f _origin = Vector3f(0, 0, 0), Vector3f _dir = Vector3f(0, 0, 0), size_t _tMax = 5000) : Ray(_origin, _dir, _tMax)
+    RayDifferential(const Vector3f &_origin = Vector3f(0, 0, 0),const Vector3f &_dir = Vector3f(0, 0, 0),const size_t &_tMax = 5000) : Ray(_origin, _dir, _tMax)
     {
         hasDifferentials = false;
     };
-    ~RayDifferential();
+    
+    ~RayDifferential() override;
 
     void ScaleDifferentials(float t);
 

@@ -1,15 +1,17 @@
 #include "DirectLightIntegrator.hpp"
 
-Vector3f DirectLightIntegrator::UniformSampleOneLight(SurfaceInteraction &interaction, const Scene &scene)
+Vector3f DirectLightIntegrator::UniformSampleOneLight(SurfaceInteraction &interaction, const Scene &scene, std::shared_ptr<Camera> camera,
+                                                      std::shared_ptr<Sampler> sampler)
 {
     int nlight = scene.lights.size();
     int lightNum = std::min(int(nlight * sampler->get1D()), nlight - 1);
     std::shared_ptr<Light> light = scene.lights[lightNum];
 
-    return nlight * EstimateDirect(interaction, light, scene);
+    return nlight * EstimateDirect(interaction, light, scene, camera, sampler);
 }
 
-Vector3f DirectLightIntegrator::EstimateDirect(SurfaceInteraction &interaction, std::shared_ptr<Light> light, const Scene &scene)
+Vector3f DirectLightIntegrator::EstimateDirect(SurfaceInteraction &interaction, std::shared_ptr<Light> light, const Scene &scene, std::shared_ptr<Camera> camera,
+                                               std::shared_ptr<Sampler> sampler)
 {
 
     Vector3f Li(0, 0, 0);
@@ -41,7 +43,7 @@ Vector3f DirectLightIntegrator::EstimateDirect(SurfaceInteraction &interaction, 
         }
     }
 
-    //sample bxdf : something wrong with it!!!
+    //sample bxdf
     flag = ALL;
     float bsdfPdf;
     Vector3f fr = interaction.bsdf->sample_fr(interaction.w0, wi, bsdfPdf, sampler->get2D(), flag);
@@ -92,7 +94,7 @@ Vector3f DirectLightIntegrator::Li(Ray &ray, const Scene &scene)
         return L;
     }
     L += interaction.Le(-ray.dir);
-    L += UniformSampleOneLight(interaction, scene);
+    L += UniformSampleOneLight(interaction, scene, this->camera, this->sampler);
 
     return L;
 }

@@ -9,8 +9,8 @@ private:
     /* data */
 public:
     Primitive();
-    ~Primitive();
-
+    
+    virtual ~Primitive();
     virtual bool Intersect(const Ray &ray, SurfaceInteraction &interaction) = 0;
     virtual bool IntersectP(Ray &ray) = 0;
 

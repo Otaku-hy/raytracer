@@ -13,8 +13,8 @@ private:
     /* data */
 public:
     PlasticMaterial(const Vector3f &_R, const float &_etaI, const float &_etaT, const float _sigma);
-    ~PlasticMaterial();
-
+    
+    ~PlasticMaterial() override;
     void ComputeScatteringFunctions(SurfaceInteraction &interaction) override;
 
     Vector3f R;
