@@ -1,7 +1,7 @@
 #ifndef Material_H
 #define Material_H
 
-#include "../pbrt.hpp"
+#include "pbrt.hpp"
 
 class Material
 {

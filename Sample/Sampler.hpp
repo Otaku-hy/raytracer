@@ -1,7 +1,7 @@
 #ifndef Sampler_H
 #define Sampler_H
 
-#include "../pbrt.hpp"
+#include "pbrt.hpp"
 
 using namespace Eigen;
 

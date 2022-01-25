@@ -2,10 +2,9 @@
 #define SamplerIntegrator_H
 
 #include "Integrator.hpp"
-
-#include "../Scene/Scene.hpp"
-#include "../Camera/Camera.hpp"
-#include "../Sample/Sampler.hpp"
+#include "Scene.hpp"
+#include "Camera.hpp"
+#include "Sampler.hpp"
 
 class SamplerIntegrator : public Integrator
 {

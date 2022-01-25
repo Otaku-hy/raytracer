@@ -1,7 +1,7 @@
 #ifndef PathIntegrator_H
 #define PathIntegrator_H
 
-#include "../pbrt.hpp"
+#include "pbrt.hpp"
 #include "SamplerIntegrator.hpp"
 #include "DirectLightIntegrator.hpp"
 

@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "../lib/Eigen/Eigen"
+#include "Eigen/Eigen"
 
 using namespace Eigen;
 

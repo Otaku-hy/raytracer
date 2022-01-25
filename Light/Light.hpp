@@ -1,9 +1,9 @@
 #ifndef Light_H
 #define Light_H
 
-#include "../pbrt.hpp"
-#include "../Matrix4_4/Matrix4_4.hpp"
-#include "../Interaction/Interaction.hpp"
+#include "pbrt.hpp"
+#include "Matrix4_4.hpp"
+#include "Interaction.hpp"
 #include "Visibility.hpp"
 
 using namespace Eigen;

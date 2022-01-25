@@ -1,9 +1,9 @@
 #ifndef Visibility_H
 #define Visibility_H
 
-#include "../pbrt.hpp"
-#include "../Scene/Scene.hpp"
-#include "../Interaction/Interaction.hpp"
+#include "pbrt.hpp"
+#include "Scene.hpp"
+#include "Interaction.hpp"
 
 class VisibilityTester
 {

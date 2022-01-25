@@ -1,9 +1,7 @@
 #ifndef Filter_H
 #define Filter_H
 
-#include "../lib/Eigen/Eigen"
-
-using namespace Eigen;
+#include "pbrt.hpp"
 
 class Filter
 {

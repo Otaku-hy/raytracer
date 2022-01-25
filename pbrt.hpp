@@ -12,7 +12,7 @@
 #include <fstream>
 #include <sstream>
 
-#include "lib/Eigen/Eigen"
+#include "Eigen/Eigen"
 
 #include "Utils/Utils.hpp"
 #include "Utils/MatrixFunctions.hpp"

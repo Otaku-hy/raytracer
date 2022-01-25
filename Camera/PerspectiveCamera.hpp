@@ -1,8 +1,6 @@
 #ifndef Perspective_H
 #define Perspective_H
 
-#include <iostream>
-
 #include "Camera.hpp"
 
 class PerspectiveCamera : public Camera

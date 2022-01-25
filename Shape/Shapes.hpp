@@ -1,7 +1,7 @@
 #ifndef Shapes_H
 #define Shapes_H
 
-#include "../pbrt.hpp"
+#include "pbrt.hpp"
 
 using namespace Eigen;
 

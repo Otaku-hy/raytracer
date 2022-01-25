@@ -1,7 +1,7 @@
 #ifndef Matrix4_4_H
 #define Matrix4_4_H
 
-#include "../Utils/Utils.hpp"
+#include "Utils.hpp"
 
 class Matrix4_4
 {

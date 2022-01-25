@@ -1,7 +1,7 @@
 #ifndef Bounds_H
 #define Bounds_H
 
-#include "../pbrt.hpp"
+#include "pbrt.hpp"
 #include "Ray.hpp"
 
 using namespace Eigen;

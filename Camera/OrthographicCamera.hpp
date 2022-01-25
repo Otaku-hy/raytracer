@@ -2,7 +2,7 @@
 #define Orthographic_H
 
 #include "Camera.hpp"
-#include "../Acceleration/Bounds.hpp"
+#include "Bounds.hpp"
 
 class OrthographicCamera : public Camera
 {

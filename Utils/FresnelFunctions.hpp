@@ -1,7 +1,7 @@
 #ifndef Fresnel_Help
 #define Fresnel_Help
 
-#include "../lib/Eigen/Eigen"
+#include "Eigen/Eigen"
 #include "Utils.hpp"
 
 inline float FrDielectric(float cosThetaI, float etaI, float etaT)

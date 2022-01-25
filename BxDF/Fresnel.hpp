@@ -1,10 +1,11 @@
 #ifndef Fresnel_H
 #define Fresnel_H
 
-#include "../lib/Eigen/Eigen"
 #include <iostream>
-#include "../Utils/SphericalCoordFuncs.hpp"
-#include "../Utils/FresnelFunctions.hpp"
+
+#include "Eigen/Eigen"
+#include "SphericalCoordFuncs.hpp"
+#include "FresnelFunctions.hpp"
 
 using namespace Eigen;
 

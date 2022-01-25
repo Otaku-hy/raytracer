@@ -3,12 +3,11 @@
 
 #include "Shapes.hpp"
 #include "Ray.hpp"
-#include "../Acceleration/Bounds.hpp"
-#include "../Matrix4_4/Matrix4_4.hpp"
-#include "../Interaction/Interaction.hpp"
-#include "../Interaction/SurfaceInteraction.hpp"
-
-#include "../Mesh/TriangleMesh.hpp"
+#include "Bounds.hpp"
+#include "Matrix4_4.hpp"
+#include "Interaction.hpp"
+#include "SurfaceInteraction.hpp"
+#include "TriangleMesh.hpp"
 
 class Triangle : public Shapes
 {

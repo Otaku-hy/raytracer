@@ -1,9 +1,9 @@
 #ifndef Film_H
 #define Film_H
 
-#include "../pbrt.hpp"
-#include "../Filter/MitchellFilter.hpp"
-#include "../Filter/GaussianFilter.hpp"
+#include "pbrt.hpp"
+#include "MitchellFilter.hpp"
+#include "GaussianFilter.hpp"
 
 using namespace Eigen;
 

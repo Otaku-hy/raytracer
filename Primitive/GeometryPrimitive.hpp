@@ -2,11 +2,11 @@
 #define GPrimitive_H
 
 #include "Primitive.hpp"
-#include "../Shape/Shapes.hpp"
-#include "../Matrix4_4/Matrix4_4.hpp"
-#include "../Acceleration/Bounds.hpp"
-#include "../Material/Material.hpp"
-#include "../Interaction/SurfaceInteraction.hpp"
+#include "Shapes.hpp"
+#include "Matrix4_4.hpp"
+#include "Bounds.hpp"
+#include "Material.hpp"
+#include "SurfaceInteraction.hpp"
 
 class GeometryPrimitive : public Primitive
 {

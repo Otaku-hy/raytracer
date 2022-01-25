@@ -8,8 +8,7 @@
 #include <iostream>
 
 #include "TriangleMesh.hpp"
-
-#include "../lib/Eigen/Eigen"
+#include "Eigen/Eigen"
 
 using namespace Eigen;
 

@@ -2,11 +2,11 @@
 #define DirectLightIntegrator_H
 
 #include "SamplerIntegrator.hpp"
-#include "../Scene/Scene.hpp"
-#include "../Light/Visibility.hpp"
-#include "../Material/BSDF.hpp"
-#include "../Material/BSSRDF.hpp"
-#include "../Interaction/SurfaceInteraction.hpp"
+#include "Scene.hpp"
+#include "Visibility.hpp"
+#include "BSDF.hpp"
+#include "BSSRDF.hpp"
+#include "SurfaceInteraction.hpp"
 
 class DirectLightIntegrator : public SamplerIntegrator
 {

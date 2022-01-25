@@ -1,9 +1,9 @@
 #ifndef Scene_H
 #define Scene_H
 
-#include "../pbrt.hpp"
+#include "pbrt.hpp"
 #include "Ray.hpp"
-#include "../Acceleration/BVHAccel.hpp"
+#include "BVHAccel.hpp"
 
 class Scene
 {

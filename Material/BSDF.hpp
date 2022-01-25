@@ -1,10 +1,10 @@
 #ifndef BSDF_H
 #define BSDF_H
 
-#include "../pbrt.hpp"
-#include "../BxDF/BxDF.hpp"
-#include "../Matrix4_4/Matrix4_4.hpp"
-#include "../Interaction/SurfaceInteraction.hpp"
+#include "pbrt.hpp"
+#include "BxDF.hpp"
+#include "Matrix4_4.hpp"
+#include "SurfaceInteraction.hpp"
 
 class BSDF
 {

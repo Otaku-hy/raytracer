@@ -1,7 +1,7 @@
 #ifndef Integrator_H
 #define Integrator_H
 
-#include "../pbrt.hpp"
+#include "pbrt.hpp"
 
 class Integrator
 {

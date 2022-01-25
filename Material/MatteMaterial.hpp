@@ -4,8 +4,8 @@
 #include "pbrt.hpp"
 #include "BSDF.hpp"
 #include "Material.hpp"
-#include "../BxDF/BxDF.hpp"
-#include "../BxDF/Lambertain.hpp"
+#include "BxDF.hpp"
+#include "Lambertain.hpp"
 #include "Microfacet.hpp"
 
 class MatteMaterial : public Material

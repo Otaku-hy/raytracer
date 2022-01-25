@@ -1,10 +1,10 @@
 #ifndef BVHAccel_H
 #define BVHAccel_H
 
-#include "../pbrt.hpp"
+#include "pbrt.hpp"
 #include "BVHStruct.hpp"
 #include "Bounds.hpp"
-#include "../Primitive/Primitive.hpp"
+#include "Primitive.hpp"
 
 enum splitMethod
 {

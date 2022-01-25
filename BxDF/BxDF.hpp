@@ -1,7 +1,7 @@
 #ifndef BxDF_H
 #define BxDF_H
 
-#include "../pbrt.hpp"
+#include "pbrt.hpp"
 
 using namespace Eigen;
 

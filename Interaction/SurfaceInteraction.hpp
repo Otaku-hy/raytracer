@@ -1,12 +1,12 @@
 #ifndef SurfaceInteraction_H
 #define SurfaceInteraction_H
 
-#include "../pbrt.hpp"
+#include "pbrt.hpp"
 #include "Interaction.hpp"
-#include "../Light/AreaLight.hpp"
-#include "../Primitive/Primitive.hpp"
-#include "../Material/BSDF.hpp"
-#include "../Material/BSSRDF.hpp"
+#include "AreaLight.hpp"
+#include "Primitive.hpp"
+#include "BSDF.hpp"
+#include "BSSRDF.hpp"
 
 class SurfaceInteraction : public Interaction
 {

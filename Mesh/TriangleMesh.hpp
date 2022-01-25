@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "../lib/Eigen/Eigen"
+#include "Eigen/Eigen"
 
 using namespace Eigen;
 

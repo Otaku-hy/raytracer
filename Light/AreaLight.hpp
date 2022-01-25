@@ -1,9 +1,9 @@
 #ifndef AreaLight_H
 #define AreaLight_H
 
-#include "../pbrt.hpp"
+#include "pbrt.hpp"
 #include "Light.hpp"
-#include "../Shape/Shapes.hpp"
+#include "Shapes.hpp"
 
 class AreaLight : public Light
 {

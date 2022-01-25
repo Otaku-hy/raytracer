@@ -3,9 +3,9 @@
 
 #include "Shapes.hpp"
 #include "Ray.hpp"
-#include "../Acceleration/Bounds.hpp"
-#include "../Matrix4_4/Matrix4_4.hpp"
-#include "../Interaction/SurfaceInteraction.hpp"
+#include "Bounds.hpp"
+#include "Matrix4_4.hpp"
+#include "SurfaceInteraction.hpp"
 
 class Sphere : public Shapes
 {

@@ -1,7 +1,7 @@
 #ifndef Primitive_H
 #define Primitive_H
 
-#include "../pbrt.hpp"
+#include "pbrt.hpp"
 
 class Primitive
 {
