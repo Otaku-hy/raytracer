@@ -6,37 +6,31 @@
 class PixelSampler : public Sampler
 {
 private:
-
 protected:
-    std::vector<std::vector<float>> samples1D;
-    std::vector<std::vector<Vector2f>> samples2D;
+    std::map<std::string, std::vector<float>> samplers1D_;
+    std::map<std::string, std::vector<Vector2f>> samplers2D_;
 
 public:
     PixelSampler() = default;
-    PixelSampler(size_t _sampleNum, size_t _sample1DDimension, size_t _sample2DDimension) : sample1DDimension(_sample1DDimension), sample2DDimension(_sample2DDimension), Sampler(_sampleNum, _sample1DDimension + 2 * _sample2DDimension)
-    {
-        for (int i = 0; i < sample1DDimension; i++)
-        {
-            samples1D.push_back(std::vector<float>(sampleNum));
-        }
-        for (int i = 0; i < sample2DDimension; i++)
-        {
-            samples2D.push_back(std::vector<Vector2f>(sampleNum));
-        }
-    };
-    
+    PixelSampler(size_t sample_num_per_pixel) : Sampler(sample_num_per_pixel),sample_num_per_pixel_(sample_num_per_pixel){};
+
     ~PixelSampler() override;
-    Vector2f get2D() override;
-    float get1D() override;
+    Vector2f getRandom2D() override;
+    float getRandom1D() override;
 
-    void startSampler(Vector2f seed) override;
+    void startSampler(Vector2f seed, const std::string &sampler_name) override;
 
-    float getSample1D(const int &dimensionIndex, const int &sampleIndex) override;
-    Vector2f getSample2D(const int &dimensionIndex, const int &sampleIndex) override;
+    void AddSampler1D(const std::string &sampler_name);
+    void AddSampler2D(const std::string &sampler_name);
+
+    virtual std::vector<float> &getSampler1D(const std::string &sampler_name) override;
+    virtual std::vector<Vector2f> &getSampler2D(const std::string &sampler_name) override;
+
+    virtual float getSample1D(const std::string &sampler_name, int sampleIndex) override;
+    virtual Vector2f getSample2D(const std::string &sampler_name, int sampleIndex) override;
 
     Vector2i currentPixel;
-    size_t sample1DDimension;
-    size_t sample2DDimension;
+    size_t sample_num_per_pixel_;
 };
 
 #endif

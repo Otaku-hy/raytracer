@@ -96,7 +96,7 @@ float GGXDistribution::lambda(const Vector3f &w)
         return 0;
     }
 
-    return (std::sqrt(1 + alphaG * alphaG * tan2ThetaW) - 1) / 2.0;
+    return (std::sqrt(1 + alphaG * alphaG * tan2ThetaW) - 1) / 2.0f;
 }
 
 float GGXDistribution::G(const Vector3f &w0, const Vector3f &wi)
@@ -111,7 +111,7 @@ float GGXDistribution::G(const Vector3f &w0, const Vector3f &wi)
     float dphi = std::asin(sinDphi);
     if (dphi < 0)
         dphi = -dphi;
-    float lambdaPhi = 4.41 * dphi / (4.41 * dphi + 1);
+    float lambdaPhi = 4.41f * dphi / (4.41f * dphi + 1);
 
     float lambdaO = lambda(w0);
     float lambdaI = lambda(wi);

@@ -1,25 +1,22 @@
-// #ifndef Aggregate_H
-// #define Aggregate_H
+#ifndef Aggregate_H
+#define Aggregate_H
 
-// #include "../pbrt.hpp"
-// #include "../Primitive/Primitive.hpp"
+class Aggregate
+{
+private:
+    /* data */
+public:
+    Aggregate();
+    ~Aggregate();
 
-// class Aggregate : public Primitive
-// {
-// private:
-//     /* data */
-// public:
-//     Aggregate() = default;
-//     ~Aggregate();
+    bool intersect();
+    void getAreaLight();
+    void getMaterial();
+    void worldBound();
+};
 
-//     bool intersect(Ray &ray, Intersection &intersection);
-//     AreaLight *getAreaLight();
-//     Material *getMaterial();
-//     Bound3D worldBound();
-// };
+Aggregate::~Aggregate()
+{
+}
 
-// Aggregate::~Aggregate()
-// {
-// }
-
-// #endif
+#endif

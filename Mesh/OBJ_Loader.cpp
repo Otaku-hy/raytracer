@@ -23,6 +23,7 @@ Loader::Loader(const std::string &_fileName) : fileName(_fileName)
 
             Vector3f tmpNorm;
             lstream >> tmpNorm.x() >> tmpNorm.y() >> tmpNorm.z();
+            tmpNorm.normalize();
             norm.push_back(tmpNorm);
         }
         else if (word == "vt")

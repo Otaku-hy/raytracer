@@ -11,6 +11,8 @@ BVHAccel::BVHAccel(std::vector<std::shared_ptr<Primitive>> &p, splitMethod metho
     int totalNode = 0;
     std::vector<std::shared_ptr<Primitive>> ordered_primitive;
 
+    //  std::cout <<"here";
+
     BVHNode *root = NULL;
 
     if (method == HLBVH)
@@ -24,6 +26,8 @@ BVHAccel::BVHAccel(std::vector<std::shared_ptr<Primitive>> &p, splitMethod metho
 
     cnt = totalNode;
 
+    // std::cout <<totalNode;
+
     primitive = ordered_primitive;
 
     linearBVH = std::vector<LinearBVHNode>(totalNode);
@@ -31,10 +35,14 @@ BVHAccel::BVHAccel(std::vector<std::shared_ptr<Primitive>> &p, splitMethod metho
     int orgin = 0;
     flattenBVHTree(root, orgin);
 
+    // for (int i = 0; i < linearBVH.size(); i++)
+    // {
+    //     std::cout << linearBVH[i].primitivesOffset << " ";
+    // }
     DeleteTreeNode(root);
 }
 
-BVHNode *BVHAccel::recursiveBuild(int start, int end, int &nodeCount, splitMethod method, std::vector<std::shared_ptr<Primitive>> ordered_primitive)
+BVHNode *BVHAccel::recursiveBuild(int start, int end, int &nodeCount, splitMethod method, std::vector<std::shared_ptr<Primitive>>& ordered_primitive)
 {
     BVHNode *node = new BVHNode;
 
@@ -49,8 +57,9 @@ BVHNode *BVHAccel::recursiveBuild(int start, int end, int &nodeCount, splitMetho
     {
         nodeCount++;
         node->leafNode(nPrimitive, ordered_primitive.size(), b);
-        for (int i = start; i < end; i++)
-            ordered_primitive.push_back(primitive[pInfo[i].primIndex]);
+        // std::cout << ordered_primitive.size() <<"this is size  ";
+        // for (int i = start; i < end; i++)
+        ordered_primitive.push_back(primitive[pInfo[start].primIndex]);
     }
     else
     {
@@ -91,7 +100,7 @@ BVHNode *BVHAccel::recursiveBuild(int start, int end, int &nodeCount, splitMetho
                 }
                 else
                 {
-                    //init bucket;
+                    // init bucket;
                     for (int i = start; i < end; i++)
                     {
                         int b = nBuckets * centerBound.offset(pInfo[i].center)[axis];
@@ -100,7 +109,7 @@ BVHNode *BVHAccel::recursiveBuild(int start, int end, int &nodeCount, splitMetho
                         bucket[b].count++;
                         bucket[b].bound = Union(bucket[b].bound, pInfo[i].bound);
                     }
-                    //compute cost
+                    // compute cost
                     float cost[nBuckets];
                     for (int i = 0; i < nBuckets - 1; i++)
                     {
@@ -120,7 +129,7 @@ BVHNode *BVHAccel::recursiveBuild(int start, int end, int &nodeCount, splitMetho
 
                         cost[i] = 0.125 + (b0.surfaceArea() * cnt0 + b1.surfaceArea() * cnt1) / b.surfaceArea();
                     }
-                    //min cost
+                    // min cost
                     int splitBucket;
                     float minCost = cost[0];
                     for (int i = 1; i < nBuckets - 1; i++)
@@ -131,7 +140,7 @@ BVHNode *BVHAccel::recursiveBuild(int start, int end, int &nodeCount, splitMetho
                             splitBucket = i;
                         }
                     }
-                    //either leaf or split
+                    // either leaf or split
                     float leafCost = nPrimitive;
                     if (nPrimitive > maxPrimInNode || minCost < leafCost)
                     {
@@ -140,17 +149,19 @@ BVHNode *BVHAccel::recursiveBuild(int start, int end, int &nodeCount, splitMetho
                                                                  int b = nBuckets * centerBound.offset(p.center)[axis];
                                                                  if (b == nBuckets)
                                                                      b--;
-                                                                 return b < splitBucket;
-                                                             });
+                                                                 return b < splitBucket; });
                         mid = pmid - &pInfo[0];
                     }
                     else
                     {
                         nodeCount++;
                         node->leafNode(nPrimitive, ordered_primitive.size(), b);
+                        // std::cout << ordered_primitive.size() <<"this is size  " << start <<" "<<end<<" " << std::endl;
                         for (int i = start; i < end; i++)
                         {
+                            // std::cout << pInfo[i].primIndex <<" ";
                             ordered_primitive.push_back(primitive[pInfo[i].primIndex]);
+                            // std::cout << ordered_primitive.size() <<"~";
                         }
                     }
                 }
@@ -307,7 +318,7 @@ BVHNode *BVHAccel::SAHupperNode(int &nodeCount, int start, int end, std::vector<
     for (int i = 0; i < nBuckets - 1; i++)
     {
         Bound3D b0, b1;
-        int cnt0, cnt1;
+        int cnt0 = 0, cnt1 = 0;
         for (int j = 0; j <= i; j++)
         {
             cnt0++;
@@ -340,8 +351,7 @@ BVHNode *BVHAccel::SAHupperNode(int &nodeCount, int start, int end, std::vector<
                                              int b = nBuckets * centerBound.offset(p.center)[axis];
                                              if (b == nBuckets)
                                                  b--;
-                                             return b < splitIndex;
-                                         });
+                                             return b < splitIndex; });
     split = pmid - &nodeInfo[0];
 
     node->interiorNode(SAHupperNode(nodeCount, start, split, nodeInfo, treeLet), SAHupperNode(nodeCount, split, end, nodeInfo, treeLet), axis, bound);
@@ -351,21 +361,21 @@ BVHNode *BVHAccel::SAHupperNode(int &nodeCount, int start, int end, std::vector<
 
 BVHNode *BVHAccel::HLBVHBuild(int &nodeCount, std::vector<std::shared_ptr<Primitive>> &ordered_primitive)
 {
-    //find max bounding
+    // find max bounding
     Bound3D centerBound;
     for (int i = 0; i < primitive.size(); i++)
     {
         centerBound = Union(centerBound, pInfo[i].center);
     }
-    //init mortonInfo
+    // init mortonInfo
     for (int i = 0; i < primitive.size(); i++)
     {
         MortonInfo.push_back(primitiveMorton(i, encodeMorton(mortonScale * centerBound.offset(pInfo[i].center))));
     }
-    //radix sort
+    // radix sort
     radixSort(MortonInfo);
 
-    //gen treelet
+    // gen treelet
     std::vector<HLBVHtreeLet> treeLetToBuild;
 
     int s = 0;
@@ -393,7 +403,7 @@ BVHNode *BVHAccel::HLBVHBuild(int &nodeCount, std::vector<std::shared_ptr<Primit
         finishedBuild.push_back(node);
     }
 
-    //SAH build upper tree -> root node
+    // SAH build upper tree -> root node
     std::vector<primitiveInfo> nodeInfo;
     for (int i = 0; i < finishedBuild.size(); i++)
     {
@@ -422,6 +432,7 @@ int BVHAccel::flattenBVHTree(BVHNode *node, int &currentIndex)
     else
     {
         linearBVH[nodeIndex].primitivesOffset = node->firstPOffset;
+        // std::cout << node->firstPOffset <<"  ";
     }
 
     return nodeIndex;
@@ -429,13 +440,15 @@ int BVHAccel::flattenBVHTree(BVHNode *node, int &currentIndex)
 
 bool BVHAccel::Intersect(const Ray &ray, SurfaceInteraction &interaction)
 {
+     std::cout << "here";
     bool intersected = false;
     int currentNode = 0;
 
-    int nodeStack[64];
+    int nodeStack[20000];
     int top = 0;
 
-    nodeStack[top++] = 0;
+    nodeStack[top] = 0;
+    top++;
 
     while (top != 0)
     {
@@ -444,16 +457,21 @@ bool BVHAccel::Intersect(const Ray &ray, SurfaceInteraction &interaction)
 
         if (node->bound.IntersectP(ray))
         {
-            // std::cout << nodeStack[top];
+            // std::cout << "here";
             if (node->nPrimitve == 0)
             {
-                nodeStack[top++] = node->secondChildOffset;
-                nodeStack[top++] = (++currentNode);
+
+                nodeStack[top] = node->secondChildOffset;
+                top++;
+
+                nodeStack[top] = (++currentNode);
+                top++;
             }
             else
             {
                 currentNode = nodeStack[top - 1];
                 // std::cout << node->nPrimitve << " " << node->primitivesOffset << " ";
+                // std::cout <<node->primitivesOffset;
                 for (int i = 0; i < node->nPrimitve; i++)
                 {
 
@@ -469,6 +487,7 @@ bool BVHAccel::Intersect(const Ray &ray, SurfaceInteraction &interaction)
             currentNode = nodeStack[top - 1];
         }
     }
+   
 
     return intersected;
 }
@@ -478,7 +497,7 @@ bool BVHAccel::IntersectP(Ray &ray)
     bool intersected = false;
     int currentNode = 0;
 
-    int nodeStack[64];
+    int nodeStack[20000];
     int top = 0;
 
     nodeStack[top++] = 0;

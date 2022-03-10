@@ -99,12 +99,12 @@ inline T lerp(float t, const T &s1, const T &s2)
 }
 
 template <typename T>
-inline void Shuffle(T *sample, int cnt, int nDimension)
+inline void Shuffle(T *sample, int cnt)
 {
     for (int i = 0; i < cnt; i++)
     {
         int other = i + randomInt(cnt - i);
-        std::swap(sample[nDimension * cnt + i], sample[nDimension * cnt + other]);
+        std::swap(sample[i], sample[other]);
     }
 }
 

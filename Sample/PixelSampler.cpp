@@ -1,41 +1,68 @@
 #include "PixelSampler.hpp"
 
-Vector2f PixelSampler::get2D()
+Vector2f PixelSampler::getRandom2D()
 {
     return Vector2f(rand() % 100 / 100.0, rand() % 100 / 100.0);
 }
 
-float PixelSampler::get1D()
+float PixelSampler::getRandom1D()
 {
     return rand() % 100 / 100.0;
 }
 
-void PixelSampler::startSampler(Vector2f seed)
+void PixelSampler::AddSampler1D(const std::string &sampler_name)
+{
+    std::vector<float> samplers(sample_num_per_pixel_);
+    samplers1D_.insert(std::pair<std::string, std::vector<float>>(sampler_name, samplers));
+}
+
+void PixelSampler::AddSampler2D(const std::string &sampler_name)
+{
+    std::vector<Vector2f> samplers(sample_num_per_pixel_);
+    samplers2D_.insert(std::pair<std::string, std::vector<Vector2f>>(sampler_name, samplers));
+}
+
+void PixelSampler::startSampler(Vector2f seed, const std::string &sampler_name)
 {
     currentPixel = Vector2i(seed[0], seed[1]);
     currentSample = 0;
 
-    for (int i = 0; i < sampleNum; i++)
+    if (samplers1D_.find(sampler_name) != samplers1D_.end())
     {
-        for (int j = 0; j < sample2DDimension; j++)
+        auto &sampler = getSampler1D(sampler_name);
+        for (int i = 0; i < sample_num_per_pixel_; i++)
         {
-            samples2D[j][i] = get2D();
+            sampler[i] = getRandom1D();
         }
-        for (int j = 0; j < sample1DDimension; j++)
+    }
+    if (samplers2D_.find(sampler_name) != samplers2D_.end())
+    {
+        auto &sampler = getSampler2D(sampler_name);
+        for (int i = 0; i < sample_num_per_pixel_; i++)
         {
-            samples1D[j][i] = get1D();
+            sampler[i] = getRandom2D();
         }
     }
 }
 
-float PixelSampler::getSample1D(const int &dimensionIndex, const int &sampleIndex)
+std::vector<float> &PixelSampler::getSampler1D(const std::string &sampler_name)
 {
-    return samples1D[dimensionIndex][sampleIndex];
+    return samplers1D_.find(sampler_name)->second;
 }
 
-Vector2f PixelSampler::getSample2D(const int &dimensionIndex, const int &sampleIndex)
+std::vector<Vector2f> &PixelSampler::getSampler2D(const std::string &sampler_name)
 {
-    return samples2D[dimensionIndex][sampleIndex];
+    return samplers2D_.find(sampler_name)->second;
+}
+
+float PixelSampler::getSample1D(const std::string &sampler_name, int sampleIndex)
+{
+    return getSampler1D(sampler_name)[sampleIndex];
+}
+
+Vector2f PixelSampler::getSample2D(const std::string &sampler_name, int sampleIndex)
+{
+    return getSampler2D(sampler_name)[sampleIndex];
 }
 
 PixelSampler::~PixelSampler()

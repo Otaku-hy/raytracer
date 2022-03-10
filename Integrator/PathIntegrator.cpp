@@ -28,7 +28,7 @@ Vector3f PathIntegrator::Li(Ray &ray, const Scene &scene)
             Vector3f wi, currentW0 = -ray.dir;
             float currentPdf;
             BxDFType flag = ALL;
-            Vector3f currentFr = interaction.bsdf->sample_fr(currentW0, wi, currentPdf, sampler->get2D(), flag);
+            Vector3f currentFr = interaction.bsdf->sample_fr(currentW0, wi, currentPdf, sampler->getRandom2D(), flag);
 
             if (currentFr.isZero() || currentPdf == 0)
             {
@@ -45,7 +45,7 @@ Vector3f PathIntegrator::Li(Ray &ray, const Scene &scene)
             SurfaceInteraction iti;
             Vector3f wi, currentW0 = -ray.dir;
             float subscatterPdf;
-            Vector3f subscatterFr = interaction.bssrdf->Sample_S(scene, currentW0, iti, subscatterPdf, sampler->get2D());
+            Vector3f subscatterFr = interaction.bssrdf->Sample_S(scene, currentW0, iti, subscatterPdf, sampler->getRandom2D());
 
             if (subscatterPdf == 0 || subscatterFr.isZero())
             {
@@ -66,7 +66,7 @@ Vector3f PathIntegrator::Li(Ray &ray, const Scene &scene)
 
             float adaptorPdf;
             BxDFType flag = ALL;
-            Vector3f adaptorFr = iti.bsdf->sample_fr(iti.w0, wi, adaptorPdf, sampler->get2D(), flag);
+            Vector3f adaptorFr = iti.bsdf->sample_fr(iti.w0, wi, adaptorPdf, sampler->getRandom2D(), flag);
 
             if (adaptorPdf == 0 || adaptorFr.isZero())
             {
@@ -81,7 +81,7 @@ Vector3f PathIntegrator::Li(Ray &ray, const Scene &scene)
         if (bounds > 3)
         {
             float q = 1 - RussianRoulette(beta.y());
-            if (sampler->get1D() < q)
+            if (sampler->getRandom1D() < q)
             {
                 break;
             }

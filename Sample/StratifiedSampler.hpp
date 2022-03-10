@@ -9,10 +9,10 @@ private:
     /* data */
 public:
     StratifiedSampler() = default;
-    StratifiedSampler(int _xPixelSamples, int _yPixelSamples, size_t _sample1DDimension, size_t _sample2DDimension, bool _jitterSamples) : xPixelSamples(_xPixelSamples), yPixelSamples(_yPixelSamples), PixelSampler(_xPixelSamples * _yPixelSamples, _sample1DDimension, _sample2DDimension), jitterSamples(_jitterSamples){};
+    StratifiedSampler(int _xPixelSamples, int _yPixelSamples, bool _jitterSamples) : xPixelSamples(_xPixelSamples), yPixelSamples(_yPixelSamples), PixelSampler(_xPixelSamples * _yPixelSamples), jitterSamples(_jitterSamples){};
     
     ~StratifiedSampler() override;
-    void startSampler(Vector2f seed) override;
+    void startSampler(Vector2f seed,const std::string& sampler_name) override;
 
     void stratifiedSample1D(float *sample, size_t nSize, bool jitter);
     void stratifiedSample2D(Vector2f *sample, size_t nx, size_t ny, bool jitter);

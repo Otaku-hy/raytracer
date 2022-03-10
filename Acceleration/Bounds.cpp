@@ -17,6 +17,13 @@ Bound3D::Bound3D(Vector3f _pMin, Edges _edges) : pMin(_pMin), edges(_edges)
     pMax = pMin + Vector3f(edges.a, edges.b, edges.c);
 };
 
+Bound3D::Bound3D(const Bound3D &other)
+{
+    pMin = other.pMin;
+    pMax = other.pMax;
+    edges = other.edges;
+}
+
 Bound3D::~Bound3D()
 {
 }
@@ -109,8 +116,14 @@ Bound3D Union(const Bound3D &b1, const Bound3D &b2)
                    Vector3f(std::max(b1.pMax.x(), b2.pMax.x()), std::max(b1.pMax.y(), b2.pMax.y()), std::max(b1.pMax.z(), b2.pMax.z())));
 }
 
-Bound3D Union(const Bound3D &b,const Vector3f &p)
+Bound3D Union(const Bound3D &b, const Vector3f &p)
 {
     return Bound3D(Vector3f(std::min(b.pMin.x(), p.x()), std::min(b.pMin.y(), p.y()), std::min(b.pMin.z(), p.z())),
                    Vector3f(std::max(b.pMax.x(), p.x()), std::max(b.pMax.y(), p.y()), std::max(b.pMax.z(), p.z())));
+}
+
+Bound3D Union(const Vector3f &vec1, const Vector3f &vec2)
+{
+    return  Bound3D(Vector3f(std::min(vec1.x(), vec2.x()), std::min(vec1.y(), vec2.y()), std::min(vec1.z(), vec2.z())),
+                   Vector3f(std::max(vec1.x(), vec2.x()), std::max(vec1.y(), vec2.y()), std::max(vec1.z(), vec2.z())));
 }

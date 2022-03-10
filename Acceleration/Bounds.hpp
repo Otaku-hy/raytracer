@@ -20,6 +20,7 @@ public:
     Bound3D(Vector3f p);
     Bound3D(Vector3f _pMin, Vector3f _pMax);
     Bound3D(Vector3f _pMin, Edges _edges);
+    Bound3D(const Bound3D &other);
 
     bool isInside(Vector3f p);
     Vector3f getCorner(size_t i);
@@ -34,11 +35,12 @@ public:
 
     ~Bound3D();
 
-    Vector3f pMin = Vector3f(__FLT_MAX__, __FLT_MAX__, __FLT_MAX__), pMax = Vector3f(-__FLT_MAX__, -__FLT_MAX__, -__FLT_MAX__);
+    Vector3f pMin = Vector3f(FLT_MAX, FLT_MAX, FLT_MAX), pMax = Vector3f(-FLT_MAX, -FLT_MAX, -FLT_MAX);
     Edges edges;
 };
 
 Bound3D Union(const Bound3D &b, const Vector3f &p);
 Bound3D Union(const Bound3D &b1, const Bound3D &b2);
+Bound3D Union(const Vector3f &vec1, const Vector3f &vec2);
 
 #endif

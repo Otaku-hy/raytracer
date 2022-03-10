@@ -10,12 +10,18 @@ struct BVHNode
     BVHNode *lchild, *rchild;
     int firstPOffset, splitAxis, nPrimitive;
 
+    BVHNode(){
+        lchild = NULL;
+        rchild = NULL;
+    }
+
     void leafNode(int n, int first, const Bound3D &b)
     {
         lchild = rchild = NULL;
         nPrimitive = n;
         firstPOffset = first;
         bound = b;
+        splitAxis = 0;
     }
 
     void interiorNode(BVHNode *lc, BVHNode *rc, int axis, const Bound3D &b)
@@ -24,6 +30,8 @@ struct BVHNode
         rchild = rc;
         splitAxis = axis;
         bound = b;
+        nPrimitive = 0;
+        firstPOffset = -1;
     }
     void interiorNode(BVHNode *lc, BVHNode *rc, int axis)
     {
@@ -31,6 +39,8 @@ struct BVHNode
         rchild = rc;
         bound = Union(lc->bound, rc->bound);
         splitAxis = axis;
+        nPrimitive = 0;
+        firstPOffset = -1;
     }
 };
 

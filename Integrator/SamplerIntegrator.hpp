@@ -6,6 +6,8 @@
 #include "Camera.hpp"
 #include "Sampler.hpp"
 
+#include <omp.h>
+
 class SamplerIntegrator : public Integrator
 {
 private:
@@ -17,7 +19,7 @@ public:
     ~SamplerIntegrator() override;
     void Render(const Scene &scene) override;
 
-    virtual Vector3f Li(Ray &ray, const Scene &scene) = 0;
+    virtual Vector3f Li(Ray &ray, const Scene &scene);
 
     std::shared_ptr<Camera> camera;
     std::shared_ptr<Sampler> sampler;

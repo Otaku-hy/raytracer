@@ -14,8 +14,8 @@ bool Interaction::IsSurfaceInteraction()
 }
 
 /* note that when spawn ray, it's important that the offset value set either a little bit upper 
-than the surface, that is the direction is out the surface, or a little bit lower than the 
-surface, that is the direction is in the surface
+than the surface, that is the direction is outside the surface, or a little bit lower than the 
+surface, that is the direction is inside the surface
 */
 
 Ray Interaction::SpawnRay(const Interaction &p2) const 

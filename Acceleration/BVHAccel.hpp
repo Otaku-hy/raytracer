@@ -24,7 +24,7 @@ public:
 
     ~BVHAccel();
 
-    BVHNode *recursiveBuild(int start, int end, int &nodeCount, splitMethod method, std::vector<std::shared_ptr<Primitive>> ordered_primitive);
+    BVHNode *recursiveBuild(int start, int end, int &nodeCount, splitMethod method, std::vector<std::shared_ptr<Primitive>>& ordered_primitive);
     BVHNode *HLBVHBuild(int &nodeCount, std::vector<std::shared_ptr<Primitive>> &ordered_primitive);
 
     int partition(int start, int end, float pivot, int axis);

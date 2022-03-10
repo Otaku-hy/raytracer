@@ -26,7 +26,7 @@ class BeckmannDistribution : public MicrofacetDistribution
 private:
     /* data */
 public:
-    BeckmannDistribution(float sigma) { alpha = sqrt(2) * sigma; };
+    BeckmannDistribution(float sigma) { alpha = sqrt(2.0f) * sigma; };
 
     ~BeckmannDistribution() override;
     float D(const Vector3f &wh) override;

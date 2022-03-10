@@ -11,6 +11,9 @@
 #include <limits.h>
 #include <fstream>
 #include <sstream>
+#include <map>
+#include <optional>
+#include <ctime>
 
 #include "Eigen/Eigen"
 

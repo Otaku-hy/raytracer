@@ -41,10 +41,11 @@ float PerspectiveCamera::GenerateRay(Ray &ray, cameraSample &sample)
     Vector3f worldPos = rasterToWorld(rasterPos);
 
     Vector3f dir = (worldPos - cameraPos).normalized();
-    // std::cout << dir << std::endl;
+    // std::cout << "in Camera  ";
 
     ray.origin = cameraPos;
     ray.dir = dir;
+
 
     return 1;
 }

@@ -56,7 +56,7 @@ Vector3f BSSRDF::Sample_S(const Scene &scene, const Vector3f &w0, SurfaceInterac
 
     if (!scene.Intersect(ray, iti))
     {
-        std::cout << "!" << std::endl;
+        // std::cout << "!" << std::endl;
     }
 
     std::shared_ptr<BxDF> bxdf = std::make_shared<BssrdfAdaptor>(etaA, etaB);

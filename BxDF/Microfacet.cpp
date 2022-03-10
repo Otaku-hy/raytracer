@@ -3,8 +3,8 @@
 OrenNayar::OrenNayar(Vector3f _kd, float _sigma) : BxDF(BxDFType(REFLECT | DIFFUSE)), kd(_kd), sigma(_sigma)
 {
     float rdSigma2 = radians(sigma) * radians(sigma);
-    A = 1 - rdSigma2 / (2 * (rdSigma2 + 0.33));
-    B = 0.45 * rdSigma2 / (rdSigma2 + 0.09);
+    A = 1 - rdSigma2 / (2 * (rdSigma2 + 0.33f));
+    B = 0.45 * rdSigma2 / (rdSigma2 + 0.09f);
 }
 
 Vector3f OrenNayar::fr(const Vector3f &w0, const Vector3f &wi)

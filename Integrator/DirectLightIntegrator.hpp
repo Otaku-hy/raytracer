@@ -17,7 +17,8 @@ public:
                           std::shared_ptr<Sampler> _sampler, int _maxDepth) : SamplerIntegrator(_camera, _sampler), maxDepth(_maxDepth){};
     
     ~DirectLightIntegrator() override;
-    Vector3f Li(Ray &ray, const Scene &scene) override;
+    
+    virtual Vector3f Li(Ray &ray, const Scene &scene) override;
 
     static Vector3f UniformSampleOneLight(SurfaceInteraction &interaction, const Scene &scene, std::shared_ptr<Camera> camera,
                                           std::shared_ptr<Sampler> sampler);

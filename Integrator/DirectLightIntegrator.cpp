@@ -4,10 +4,11 @@ Vector3f DirectLightIntegrator::UniformSampleOneLight(SurfaceInteraction &intera
                                                       std::shared_ptr<Sampler> sampler)
 {
     int nlight = scene.lights.size();
-    int lightNum = std::min(int(nlight * sampler->get1D()), nlight - 1);
+    int lightNum = std::min(int(nlight * sampler->getRandom1D()), nlight - 1);
     std::shared_ptr<Light> light = scene.lights[lightNum];
 
     return nlight * EstimateDirect(interaction, light, scene, camera, sampler);
+    // return nlight * Vector3f(0.2,0.2,0.2);
 }
 
 Vector3f DirectLightIntegrator::EstimateDirect(SurfaceInteraction &interaction, std::shared_ptr<Light> light, const Scene &scene, std::shared_ptr<Camera> camera,
@@ -15,6 +16,8 @@ Vector3f DirectLightIntegrator::EstimateDirect(SurfaceInteraction &interaction, 
 {
 
     Vector3f Li(0, 0, 0);
+
+    // std::cout << interaction.t1 <<" ";
 
     // sample light
     BxDFType flag = ALL;
@@ -24,21 +27,22 @@ Vector3f DirectLightIntegrator::EstimateDirect(SurfaceInteraction &interaction, 
 
     float tPdf = 0;
 
-    Vector3f L0 = light->sample_Li(sampler->get2D(), lightPdf, wi, interaction, &visibility);
+    Vector3f L0 = light->sample_Li(sampler->getRandom2D(), lightPdf, wi, interaction, &visibility);
 
     if (lightPdf > 0)
     {
+    //     // std::cout << lightPdf <<" ";
         float Pdf = interaction.bsdf->PDF(interaction.w0, wi, flag);
         Vector3f fr = interaction.bsdf->fr(interaction.w0, wi, flag);
 
-        if (interaction.bsdf->bxdfs[0]->MatchType(BxDFType(TEST)))
-        {
-            // std::cout << Pdf << " " << interaction.bsdf->bxdfs[0]->PDF(interaction.w0, wi) << std::endl;
-        }
+        // if (interaction.bsdf->bxdfs[0]->MatchType(BxDFType(TEST)))
+        // {
+        //     // std::cout << Pdf << " " << interaction.bsdf->bxdfs[0]->PDF(interaction.w0, wi) << std::endl;
+        // }
 
         if (Pdf > 0 && !visibility.Occluded(scene))
         {
-            float weight = PowerHeuristic(1, lightPdf, 1, Pdf);
+            float weight = BalanceHeuristic(1, lightPdf, 1, Pdf);
             Li += fr * L0 * weight * std::abs(interaction.norm.dot(wi)) / lightPdf;
         }
     }
@@ -46,7 +50,7 @@ Vector3f DirectLightIntegrator::EstimateDirect(SurfaceInteraction &interaction, 
     //sample bxdf
     flag = ALL;
     float bsdfPdf;
-    Vector3f fr = interaction.bsdf->sample_fr(interaction.w0, wi, bsdfPdf, sampler->get2D(), flag);
+    Vector3f fr = interaction.bsdf->sample_fr(interaction.w0, wi, bsdfPdf, sampler->getRandom2D(), flag);
     bool isSpecular = false;
     if (flag & SPECULAR)
     {
@@ -72,7 +76,7 @@ Vector3f DirectLightIntegrator::EstimateDirect(SurfaceInteraction &interaction, 
 
         if (!isSpecular)
         {
-            weight = PowerHeuristic(1, bsdfPdf, 1, lightPdf);
+            weight = BalanceHeuristic(1, bsdfPdf, 1, lightPdf);
         }
 
         if (lightPdf > 0 && !visibility.Occluded(scene))
