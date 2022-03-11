@@ -10,6 +10,7 @@ Aggregate::~Aggregate()
 
 bool Aggregate::intersect()
 {
+    return false;
 }
 
 void Aggregate::getAreaLight()

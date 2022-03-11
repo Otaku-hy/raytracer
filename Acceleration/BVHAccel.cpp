@@ -440,7 +440,7 @@ int BVHAccel::flattenBVHTree(BVHNode *node, int &currentIndex)
 
 bool BVHAccel::Intersect(const Ray &ray, SurfaceInteraction &interaction)
 {
-     std::cout << "here";
+    //  std::cout << "here";
     bool intersected = false;
     int currentNode = 0;
 

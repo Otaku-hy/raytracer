@@ -28,12 +28,12 @@
 
 void Preprocess(std::vector<std::shared_ptr<Primitive>> &p, std::vector<std::shared_ptr<Light>> &lights)
 {
-    std::shared_ptr<Loader> model1 = std::make_shared<Loader>("F:/Programs/VsCode/raytracer/Model/tallbox.obj");
-    std::shared_ptr<Loader> model2 = std::make_shared<Loader>("F:/Programs/VsCode/raytracer/Model/shortbox_obj.obj");
-    std::shared_ptr<Loader> model3 = std::make_shared<Loader>("F:/Programs/VsCode/raytracer/Model/right.obj");
-    std::shared_ptr<Loader> model4 = std::make_shared<Loader>("F:/Programs/VsCode/raytracer/Model/left.obj");
-    std::shared_ptr<Loader> model5 = std::make_shared<Loader>("F:/Programs/VsCode/raytracer/Model/floor.obj");
-    std::shared_ptr<Loader> model6 = std::make_shared<Loader>("F:/Programs/VsCode/raytracer/Model/light.obj");
+    std::shared_ptr<Loader> model1 = std::make_shared<Loader>("./Model/tallbox.obj");
+    std::shared_ptr<Loader> model2 = std::make_shared<Loader>("./Model/shortbox.obj");
+    std::shared_ptr<Loader> model3 = std::make_shared<Loader>("./Model/right.obj");
+    std::shared_ptr<Loader> model4 = std::make_shared<Loader>("./Model/left.obj");
+    std::shared_ptr<Loader> model5 = std::make_shared<Loader>("./Model/floor.obj");
+    std::shared_ptr<Loader> model6 = std::make_shared<Loader>("./Model/light.obj");
 
     std::shared_ptr<TriangleMesh> mesh1, mesh2, mesh3, mesh4, mesh5, mesh6;
     model1->CreateTriangleMesh(mesh1);
@@ -59,7 +59,7 @@ void Preprocess(std::vector<std::shared_ptr<Primitive>> &p, std::vector<std::sha
         p.push_back(gP);
     }
 
-    //注释掉该物体
+    // 注释掉该物体
     for (int i = 0; i < mesh2->nTriangles; i++)
     {
         std::shared_ptr<Triangle> tri(new Triangle(mesh2, i, P, O));
@@ -111,17 +111,18 @@ void Preprocess(std::vector<std::shared_ptr<Primitive>> &p, std::vector<std::sha
     // std::shared_ptr<GeometryPrimitive> gP(new GeometryPrimitive(sphere, m, l));
     // p.push_back(gP);
 
+    //取消注释
     // std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3f(130, 100, 225), 100);
     // // std::shared_ptr<Material> m = std::make_shared<PlasticMaterial>(Vector3f(1, 1, 1), 1.0, 1.5, 1.413/2.0);
     // // std::shared_ptr<Material> m = std::make_shared<SubsurfaceMaterial>(1.0, 1.3, 2.3, 0.03, 0.8, 120.0);
-    // // std::shared_ptr<Material> m = std::make_shared<Metal>(Vector3f(1, 1, 1),Vector3f(1.0,1.0,1.0),Vector3f(0.46094, 0.46094, 0.46094), Vector3f(2.9735, 2.9735, 2.9735), 0.06);
-    // std::shared_ptr<Material> m = std::make_shared<SpecularMaterial>(Vector3f(1, 1, 1), 1.0, 1.5);
+    // std::shared_ptr<Material> m = std::make_shared<Metal>(Vector3f(1, 1, 1),Vector3f(1.0,1.0,1.0),Vector3f(0.46094, 0.46094, 0.46094), Vector3f(2.9735, 2.9735, 2.9735), 0.06);
+    // // std::shared_ptr<Material> m = std::make_shared<SpecularMaterial>(Vector3f(1, 1, 1), 1.0, 1.5);
     // std::shared_ptr<AreaLight> l = NULL;
     // std::shared_ptr<GeometryPrimitive> gP(new GeometryPrimitive(sphere, m, l));
     // p.push_back(gP);
 
 
-    //取消注释
+    
     // std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3f(270, 270, 225), 120);
    
     // std::shared_ptr<Material> m = std::make_shared<Metal>(Vector3f(1, 1, 1),Vector3f(1.0,1.0,1.0),Vector3f(0.46094, 0.46094, 0.46094), Vector3f(2.9735, 2.9735, 2.9735), 0.08f);
@@ -138,10 +139,10 @@ void Init(std::vector<std::shared_ptr<Primitive>> &p, std::vector<std::shared_pt
 
 
     //选择filter
-    // std::shared_ptr<Filter> filter(new MitchellFilter(Vector2f(2.0f, 2.0f), 1 / 3.0f, 1 / 3.0f));
-    std::shared_ptr<Filter> filter(new GaussianFilter(Vector2f(2.0f, 2.0f), 1.413f));
+    std::shared_ptr<Filter> filter(new MitchellFilter(Vector2f(2.0f, 2.0f), 1 / 3.0f, 1 / 3.0f));
+    // std::shared_ptr<Filter> filter(new GaussianFilter(Vector2f(2.0f, 2.0f), 1.413f));
 
-    Film *film = new Film(Vector2i(400, 400), "image1.ppm", filter);
+    Film *film = new Film(Vector2i(800, 800), "image.ppm", filter);
     std::shared_ptr<Camera> camera(new PerspectiveCamera(film, -0.1, -5000.0, 125.0 / 125.0, 38.0));
     camera->setViewMat(Vector3f(278, 273, -800), Vector3f(278, 273, 100), Vector3f(0, 1, 0));
     std::shared_ptr<StratifiedSampler> stratified_sampler = std::make_shared<StratifiedSampler>(5, 5, true);

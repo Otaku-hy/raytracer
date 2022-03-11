@@ -15,8 +15,4 @@ public:
     void worldBound();
 };
 
-Aggregate::~Aggregate()
-{
-}
-
 #endif

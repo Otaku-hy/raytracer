@@ -18,10 +18,10 @@ void SamplerIntegrator::Render(const Scene &scene)
                 sample.pFilm = Vector2f(i, j) + rasterBias;
                 float sampleWeight = camera->GenerateRay(ray, sample);
 
-                // Vector3f radiance = Li(ray, scene);
-                Vector3f radiance(0,0,0);
+                Vector3f radiance = Li(ray, scene);
+                // Vector3f radiance(0,0,0);
 
-                //  camera->film->addContribution(sample.pFilm, radiance, sampleWeight);
+                 camera->film->addContribution(sample.pFilm, radiance, sampleWeight);
             }
         }
     }
